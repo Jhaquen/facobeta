@@ -1,0 +1,83 @@
+body {
+  overflow: hidden;
+}
+
+#LoginDiv {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+#LogInButton {
+  margin: 5px;
+}
+
+#username {
+  width: 13%;
+  height: 3%;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid #97360f;
+  font-size: 17px;
+  text-align: center;
+}
+
+#username:focus {
+  outline: none;
+}
+
+#mainpage {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+#ExerciseDiv {
+  position: absolute;
+  height: 100vh;
+  left: 0px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 20px;
+  background-color: #d6fffd;
+  -webkit-box-shadow: 0px 3px 10px 0px #000000;
+          box-shadow: 0px 3px 10px 0px #000000;
+}
+
+#DataChart {
+  width: 60vw;
+  height: 40vh;
+}
+/*# sourceMappingURL=faco.css.map */
