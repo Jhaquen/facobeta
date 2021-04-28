@@ -40,22 +40,31 @@ $(document).ready(()=>{
             })
         }).then(response => response.json()).then(data => {
             // Setup SideBar
-            for (let ex in data[0].exercise) {
-                let exerciseLink = $(`<p id="${ex}_link"></p>`).text(ex)
-                exerciseLink.data("ex",ex)
-                // Exercise = Link: If clicked on -> DisplayWindowSetup for this Exercise 
-                exerciseLink.on("click",()=>{
-                    fetch(url+"/getExerciseData", {
-                        method:"POST",
-                        headers:{"Content-type":"application/json"},
-                        body:JSON.stringify({
-                            user:user,
-                            exercise:ex
-                        })
-                    }).then(response => response.json()).then(data => { DisplayWindowSetup(data,user,ex) })
-                })
-                //Append each Exercise
-                $("#ExerciseDiv").append(exerciseLink) 
+            console.log(data)
+            for (let category in data[0].exercise) { //Warum ist data eine liste? Nur ein element
+                let categoryDiv = $(`<div class="ExeciseCategoryDiv" id="ExDiv_${category}"></div>`)
+                categoryDiv.append(`<h2 class="ExCategory" id=${category}>${category}</h2>`)
+                let linkDiv = $(`<div></div>`) //noch ein Div zum besseren anordnen der Links
+                for (let ex in data[0].exercise[category]) {
+                    let exerciseLink = $(`<p class="ExLink" id="${ex}_link"></p>`).text(ex)
+                    exerciseLink.data("ex",ex)
+                    // Exercise = Link: If clicked on -> DisplayWindowSetup for this Exercise 
+                    exerciseLink.on("click",()=>{
+                        // get data of exercise
+                        fetch(url+"/getExerciseData", {
+                            method:"POST",
+                            headers:{"Content-type":"application/json"},
+                            body:JSON.stringify({
+                                user:user,
+                                exercise:ex
+                            })
+                        }).then(response => response.json()).then(data => { DisplayWindowSetup(data,user,ex) })
+                    })
+                    //Append each Exercise
+                    linkDiv.append(exerciseLink)
+                }   
+                categoryDiv.append(linkDiv)
+                $("#ExerciseDiv").append(categoryDiv) 
             }
 
         })

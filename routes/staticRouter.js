@@ -8,7 +8,7 @@ app.get("/", (req,res)=>{
 })
 
 app.post("/getExerciseData", (req,res)=>{
-    exModel.find({user:req.body.user, exercise:req.body.exercise}).limit(3).exec((err,data)=>{
+    exModel.find({user:req.body.user, exercise:req.body.exercise},(err,data)=>{
         if (err) { res.send({err}) } else {
             res.send(JSON.stringify(data))
         }
