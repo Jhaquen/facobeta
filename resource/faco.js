@@ -11,9 +11,10 @@ function DisplayWindowSetup(data,user,ex) {
     let chartDiv = $("#ChartDiv")
     
     if (DisplayWindowActive==true) {
+        // reloads the chart+table window by removing all elements
         table.children().remove()
         console.log(chartDiv.children())
-        chartDiv.children().remove()
+        chartDiv.children().remove() //y no work. works in dev console
     } else {DisplayWindowActive = true}
     
     setupTable(table,data)
