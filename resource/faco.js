@@ -3,7 +3,8 @@ import { setupTable, inputRowWeight, setupChart } from "./facoFunctions.js"
 const url = "http://localhost:3000"
 let DisplayWindowActive = false
 
-function DisplayWindowSetup(data,user,ex) {
+function DisplayWindowSetup(data,configdata,user,category,ex) {
+    //DisplayWindow = Window mit Graph, Tabelle
 
     console.log(data) //Nur zum testen!
     
@@ -14,9 +15,9 @@ function DisplayWindowSetup(data,user,ex) {
         table.children().remove()
         console.log(chartDiv.children())
         chartDiv.children().remove()
-    } else {DisplayWindowActive = true}
+    } else { DisplayWindowActive = true }
     
-    setupTable(table,data)
+    setupTable(table,data,configdata,category,ex)
     inputRowWeight(table,user,ex)
     chartDiv.html(`<canvas id="DataChart"></canvas>`)
     let chartObject = document.getElementById("DataChart").getContext("2d")
@@ -38,14 +39,14 @@ $(document).ready(()=>{
             body:JSON.stringify({
                 user:user
             })
-        }).then(response => response.json()).then(data => {
+        }).then(response => response.json()).then(configdata => {
             // Setup SideBar
-            console.log(data)
-            for (let category in data[0].exercise) { //Warum ist data eine liste? Nur ein element
+            console.log(configdata)
+            for (let category in configdata[0].exercise) { //Warum ist data eine liste? Nur ein element
                 let categoryDiv = $(`<div class="ExeciseCategoryDiv" id="ExDiv_${category}"></div>`)
                 categoryDiv.append(`<h2 class="ExCategory" id=${category}>${category}</h2>`)
                 let linkDiv = $(`<div></div>`) //noch ein Div zum besseren anordnen der Links
-                for (let ex in data[0].exercise[category]) {
+                for (let ex in configdata[0].exercise[category]) {
                     let exerciseLink = $(`<p class="ExLink" id="${ex}_link"></p>`).text(ex)
                     exerciseLink.data("ex",ex)
                     // Exercise = Link: If clicked on -> DisplayWindowSetup for this Exercise 
@@ -58,7 +59,7 @@ $(document).ready(()=>{
                                 user:user,
                                 exercise:ex
                             })
-                        }).then(response => response.json()).then(data => { DisplayWindowSetup(data,user,ex) })
+                        }).then(response => response.json()).then(data => { DisplayWindowSetup(data,configdata,user,category,ex) })
                     })
                     //Append each Exercise
                     linkDiv.append(exerciseLink)
