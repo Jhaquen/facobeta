@@ -1,4 +1,4 @@
-import { setupTable, inputRowWeight, setupChart } from "./facoFunctions.js"
+import { setupTable, setupChart } from "./facoFunctions.js"
 
 const url = "http://localhost:3000"
 let DisplayWindowActive = false
@@ -17,8 +17,7 @@ function DisplayWindowSetup(data,configdata,user,category,ex) {
         chartDiv.children().remove()
     } else { DisplayWindowActive = true }
     
-    setupTable(table,data,configdata,category,ex)
-    inputRowWeight(table,user,ex)
+    setupTable(table,data,configdata,user,category,ex)
     chartDiv.html(`<canvas id="DataChart"></canvas>`)
     let chartObject = document.getElementById("DataChart").getContext("2d")
     setupChart(chartObject,data)
