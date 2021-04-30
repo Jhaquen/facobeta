@@ -1,19 +1,16 @@
 const url = "http://localhost:3000"
 
-export function setupTable(table,data) {
+export function setupTable(table,data,configdata,category,ex) {
     // creates a new table row for the last 3 entries in exercise data. last 3 rows because i is data.length-3 when forloop starts
-    // the confusing mess of symbols in the for loop initialization checks if data.lenght is greater than 3 and assings i data.length-3
+    // the confusing mess of symbols in the for loop initialization checks if data.length is greater than 3 and assings i data.length-3
     // if its greater than 3. else i is 0
-    // snytax: (is this true?) ? if its true do this : else do this
+    // snytax: var=(is this true?) ? if its true do this : else do this
     for (let i=(data.length>3)?data.length-3:0; i<data.length; i++){
         let date = new Date(data[i].date).toDateString()
         // <tr></tr> -> TableRow | <td></td> -> TableData | <th></th> -> TableHeader (bold)
-        let new_row = $(`<tr id="${data[i]._id}"></tr>`).html(`<td>${date}</td>
-                                                        <td>${data[i].data.weight}</td>
-                                                        <td>${data[i].data.rep1}</td>
-                                                        <td>${data[i].data.rep2}</td>
-                                                        <td>${data[i].data.rep3}</td>                                                
-        `)
+        let new_row_string = `<td>${date}</td>`
+        for (el of configdata.exercise[category][ex]) { new_row_string += `<td>${data[i].data[el]}</td>` }
+        let new_row = $(`<tr id="${data[i]._id}"></tr>`).html(new_row_string)
         table.append(new_row)
     }
 }
