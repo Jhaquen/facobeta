@@ -15,13 +15,8 @@ function DisplayWindowSetup(data,configdata,user,category,ex) {
         // reloads the chart+table window by removing all elements
         table.children().remove()
         console.log(chartDiv.children())
-<<<<<<< HEAD
-        chartDiv.children().remove() //y no work. works in dev console
-    } else {DisplayWindowActive = true}
-=======
         chartDiv.children().remove()
     } else { DisplayWindowActive = true }
->>>>>>> 1937d4010b144782034ec915bab628779e1355a3
     
     setupTable(table,data,configdata,category,ex)
     inputRowWeight(table,user,ex)

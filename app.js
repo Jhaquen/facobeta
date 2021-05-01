@@ -6,7 +6,7 @@ const mongoose = require("mongoose")
 
 const port = 3000
 const staticRouter = require("./routes/staticRouter.js")
-const url = "mongodb://192.168.0.9:27017/sport"
+const url = "mongodb://localhost:27017/sport"
 
 app.use(express.json())
 app.use("/",staticRouter)

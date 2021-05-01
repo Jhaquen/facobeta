@@ -9,7 +9,7 @@ export function setupTable(table,data,configdata,category,ex) {
         let date = new Date(data[i].date).toDateString()
         // <tr></tr> -> TableRow | <td></td> -> TableData | <th></th> -> TableHeader (bold)
         let new_row_string = `<td>${date}</td>`
-        for (el of configdata.exercise[category][ex]) { new_row_string += `<td>${data[i].data[el]}</td>` }
+        for (let el of configdata[0].exercise[category][ex]) { new_row_string += `<td>${data[i].data[el]}</td>` }
         let new_row = $(`<tr id="${data[i]._id}"></tr>`).html(new_row_string)
         table.append(new_row)
     }
