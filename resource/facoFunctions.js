@@ -23,7 +23,7 @@ function inputRow (table,user,ex) {
 
     let input_row_string = `<td>${date}</td>`
     let input_types = []
-    for (el of configdata.exercise[category][ex]) { 
+    for (el of configdata[0].exercise[category][ex]) { 
         input_row_string += `<td><input type="number" min="1" placeholder="${el}" class="NewRowInput" id="${el}Input"></td>` 
         input_types.push(el)
     }
@@ -131,7 +131,6 @@ export function inputRowWeight (table,user,ex) {
     // append the input row
     table.append(input_row); table.append(confirm_button)
 }
-*/
 
 export function setupChart (chartContainer,data) {
     let chartData = setupChartData(data)
@@ -147,6 +146,7 @@ export function setupChart (chartContainer,data) {
         }
     })
 }
+*/
 
 function setupChartData(data) {
     let data_array = []
