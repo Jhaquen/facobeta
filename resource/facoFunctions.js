@@ -13,17 +13,17 @@ export function setupTable(table,data,configdata,user,category,ex) {
         let new_row = $(`<tr id="${data[i]._id}"></tr>`).html(new_row_string)
         table.append(new_row)
     }
-    inputRow(table,user,configdata,ex)
+    inputRow(table,user,configdata,category,ex)
 }
 
-function inputRow (table,user,ex) {
+function inputRow (table,user,configdata,category,ex) {
     // Creates a Row (input_row) containing number inputs (input type="number") and appends it to the Table
     let today = new Date().toDateString()
     let today_ISO = new Date().toISOString()
 
-    let input_row_string = `<td>${date}</td>`
+    let input_row_string = `<td>${today}</td>`
     let input_types = []
-    for (el of configdata[0].exercise[category][ex]) { 
+    for (let el of configdata[0].exercise[category][ex]) { 
         input_row_string += `<td><input type="number" min="1" placeholder="${el}" class="NewRowInput" id="${el}Input"></td>` 
         input_types.push(el)
     }
@@ -36,7 +36,7 @@ function inputRow (table,user,ex) {
         for (el of input_types) { newDocData[el] = $(`${el}Input`).val() }
         let newDoc = {  
             user:user,
-            date:today,
+            date:today_ISO,
             exercise:ex,
             data:newDocData
         }
