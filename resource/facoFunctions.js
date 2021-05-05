@@ -5,12 +5,21 @@ const url = "http://localhost:3000"
 //////////////////////
 
 function tableRow(content,css_class,css_id) {
-    if (typeof(css_class)=="string" & typeof(css_id)=="string") { var row = $(`<tr class="${css_class} id="${css_id}"></tr>`) }
+    if (typeof(css_class)=="string" & typeof(css_id)=="string") { var row = $(`<tr class="${css_class}" id="${css_id}"></tr>`) }
     else if (css_class==undefined) { var row = $(`<tr id="${css_id}"></tr>`) }
     else if (css_id==undefined) { var row = $(`<tr class="${css_class}"></tr>`)}
     else if (css_class==undefined & css_id==undefined) { var row = $(`<tr></tr>`) }
-    row.append(content)
+    if (content!=undefined) { row.append(content) }
     return row
+}
+
+function tableData(content,css_class,css_id) {
+    if (typeof(css_class)=="string" & typeof(css_id)=="string") { var data = $(`<td class="${css_class}" id="${css_id}"</td>`) }
+    else if (css_class==undefined) { var data = $(`<td id="${css_id}"</td>`) }
+    else if (css_id==undefined) { var data = $(`<td class="${css_class}"</td>>`)}
+    else if (css_class==undefined & css_id==undefined) { var data = $(`<td></td>`)}
+    if (content!=undefined) {data.append(content) }
+    return data
 }
 /////////////////////
 // Main Functions //
@@ -58,7 +67,8 @@ function inputRowNormalSet (table,user,configdata,category,ex) {
     confirm_button.on("click",()=>{
         // this does only happen if the confirm button is clicked! To understand the code u can skip this for now
         let newDocData = {}
-        for (let el of input_types) { newDocData[el] = $(`${el}Input`).val() }
+        console.log(input_types)
+        for (let el of input_types) { newDocData[el] = $(`#${el}Input`).val() }
         let newDoc = {  
             user:user,
             date:today_ISO,
@@ -71,24 +81,26 @@ function inputRowNormalSet (table,user,configdata,category,ex) {
             headers:{"Content-type":"application/json"},
             body:JSON.stringify(newDoc) // here it gets send. 
         }).then(()=>{
-            if (table.children().length >= 5) {
+            if (table.children().length >= 3) {
                 //remove first row of table
                 table.children().eq(0).remove()
             }
             // set Value of Input fields to none -> Placeholder
             input_row.find("input").each((i,child)=>{
                 child.value = ""
-            })
+            }) 
             // append new Data to table
-            let new_row_string = `<td>${today}</td>`
-            for (el of input_types) { new_row_string += `<td>${$(`${el}`).val()}</td>` }
-            input_row.before(new_row)
+            let new_row = tableRow(undefined,"NormalSetTableRow",`newData${today_ISO}`)
+            //let new_row_string = `<td>${today}</td>`
+            new_row.append(tableData(today))
+            for (let el of input_types) { new_row.append(tableData(newDocData[el])) }
+            table.append(new_row); inputRowDiv.remove()
         })
     })
     // append the input row
     let inputRowDiv = $(`<div class="InputRow"></div>`)
     inputRowDiv.append(input_row); inputRowDiv.append(confirm_button)
-    return inputRowDiv
+    return inputRowDiv 
 }
 
 export function setupChart (chartContainer,data) {
