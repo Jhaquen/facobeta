@@ -1,5 +1,21 @@
 const url = "http://localhost:3000"
 
+///////////////////////
+// Helper Functions //
+//////////////////////
+
+function tableRow(content,css_class,css_id) {
+    if (typeof(css_class)=="string" & typeof(css_id)=="string") { var row = $(`<tr class="${css_class} id="${css_id}"></tr>`) }
+    else if (css_class==undefined) { var row = $(`<tr id="${css_id}"></tr>`) }
+    else if (css_id==undefined) { var row = $(`<tr class="${css_class}"></tr>`)}
+    else if (css_class==undefined & css_id==undefined) { var row = $(`<tr></tr>`) }
+    row.append(content)
+    return row
+}
+/////////////////////
+// Main Functions //
+////////////////////
+
 export function setupTable(table,data,configdata,user,category,ex) {
     // creates a new table row for the last 3 entries in exercise data. last 3 rows because i is data.length-3 when forloop starts
     // the confusing mess of symbols in the for loop initialization checks if data.length is greater than 3 and assings i data.length-3
@@ -10,13 +26,21 @@ export function setupTable(table,data,configdata,user,category,ex) {
         // <tr></tr> -> TableRow | <td></td> -> TableData | <th></th> -> TableHeader (bold)
         let new_row_string = `<td>${date}</td>`
         for (let el of configdata[0].exercise[category][ex]) { new_row_string += `<td>${data[i].data[el]}</td>` }
-        let new_row = $(`<tr id="${data[i]._id}"></tr>`).html(new_row_string)
-        table.append(new_row)
+        table.append(tableRow(new_row_string,undefined,data[i]._id))
     }
-    inputRow(table,user,configdata,category,ex)
+    let InputButtonDiv = $(`<div class="InputButtonDiv"></div>`)
+    let NormalSetButton = $(`<button id="NormalSetButton">Add Normal Set</button>`)
+    NormalSetButton.on("click",()=>{
+        let inputRowDiv = inputRowNormalSet(table,user,configdata,category,ex)
+        InputButtonDiv.before(inputRowDiv)
+    })
+    InputButtonDiv.append(NormalSetButton)
+    $("#TableDiv").append(InputButtonDiv)
+
+    
 }
 
-function inputRow (table,user,configdata,category,ex) {
+function inputRowNormalSet (table,user,configdata,category,ex) {
     // Creates a Row (input_row) containing number inputs (input type="number") and appends it to the Table
     let today = new Date().toDateString()
     let today_ISO = new Date().toISOString()
@@ -27,13 +51,14 @@ function inputRow (table,user,configdata,category,ex) {
         input_row_string += `<td><input type="number" min="1" placeholder="${el}" class="NewRowInput" id="${el}Input"></td>` 
         input_types.push(el)
     }
-    let input_row = $(`<tr id="inputRow"></tr`).html(input_row_string)
+    let input_row = tableRow(input_row_string,"inputRow")
+    console.log(input_row)
     
     let confirm_button = $(`<button type="button" id="confirmButton">Confirm</button>`)
     confirm_button.on("click",()=>{
         // this does only happen if the confirm button is clicked! To understand the code u can skip this for now
         let newDocData = {}
-        for (el of input_types) { newDocData[el] = $(`${el}Input`).val() }
+        for (let el of input_types) { newDocData[el] = $(`${el}Input`).val() }
         let newDoc = {  
             user:user,
             date:today_ISO,
@@ -61,7 +86,9 @@ function inputRow (table,user,configdata,category,ex) {
         })
     })
     // append the input row
-    table.append(input_row); table.append(confirm_button)
+    let inputRowDiv = $(`<div class="InputRow"></div>`)
+    inputRowDiv.append(input_row); inputRowDiv.append(confirm_button)
+    return inputRowDiv
 }
 
 export function setupChart (chartContainer,data) {
@@ -78,75 +105,6 @@ export function setupChart (chartContainer,data) {
         }
     })
 }
-
-/**
-export function inputRowWeight (table,user,ex) {
-    // Creates a Row (input_row) containing number inputs (input type="number") and appends it to the Table
-    let today = new Date().toDateString()
-    let today_ISO = new Date().toISOString()
-    let input_row = $(`<tr id="inputRow"></tr`).html(`<td>${today}</td>
-                                                <td><input type="number" min="1" placeholder="Weight" class="NewRowInput" id="weightInput"></td>
-                                                <td><input type="number" min="1" placeholder="Set 1" class="NewRowInput" id="rep1Input"></td>
-                                                <td><input type="number" min="1" placeholder="Set 2" class="NewRowInput" id="rep2Input"></td>
-                                                <td><input type="number" min="1" placeholder="Set 3" class="NewRowInput" id="rep3Input"></td>`)
-    let confirm_button = $(`<button type="button" id="confirmButton">Confirm</button>`)
-    confirm_button.on("click",()=>{
-        // this does only happen if the confirm button is clicked! To understand the code u can skip this for now
-        let weight = $("#weightInput").val()
-        let rep1 = $("#rep1Input").val(); let rep2 = $("#rep2Input").val(); let rep3 = $("#rep3Input").val()
-        // this gets send to our api! look in staticRouter get("/saveExerciseData") for endpoint
-        let newDoc = {  
-            user:user,
-            date:today,
-            exercise:ex,
-            data: {
-                weight:weight,
-                rep1:rep1,
-                rep2:rep2,
-                rep3:rep3
-            }
-        }
-        fetch(url+"/saveExerciseData",{
-            method:"POST",
-            headers:{"Content-type":"application/json"},
-            body:JSON.stringify(newDoc) // here it gets send. 
-        }).then(()=>{
-            if (table.children().length >= 5) {
-                //remove first row of table
-                table.children().eq(0).remove()
-            }
-            // set Value of Input fields to none -> Placeholder
-            input_row.find("input").each((i,child)=>{
-                child.value = ""
-            })
-            // append new Data to table
-            let new_row = $(`<tr id="newRow${today_ISO}"></tr>`).html(`<td>${today}</td>
-                                                                <td>${weight}</td>
-                                                                <td>${rep1}</td>
-                                                                <td>${rep2}</td>
-                                                                <td>${rep3}</td>`)
-            input_row.before(new_row)
-        })
-    })
-    // append the input row
-    table.append(input_row); table.append(confirm_button)
-}
-
-export function setupChart (chartContainer,data) {
-    let chartData = setupChartData(data)
-    new Chart(chartContainer, {
-        type: "line",
-        data: {
-            labels: chartData[1],
-            datasets: [{
-                label: "Faço Score",
-                data: chartData[0],
-                tension: 0.1
-            }]
-        }
-    })
-}
-*/
 
 function setupChartData(data) {
     let data_array = []
