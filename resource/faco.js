@@ -14,7 +14,7 @@ function DisplayWindowSetup(data,configdata,user,category,ex) {
     if (DisplayWindowActive==true) {
         // reloads the chart+table window by removing all elements
         table.children().remove()
-        console.log(chartDiv.children())
+        $(".InputButtonDiv").remove()
         chartDiv.children().remove()
     } else { DisplayWindowActive = true }
     
