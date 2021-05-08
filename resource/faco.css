@@ -80,4 +80,20 @@ body {
   width: 60vw;
   height: 40vh;
 }
+
+#TimerDiv {
+  position: relative;
+  width: 300px;
+  height: 300px;
+}
+
+#TimerCircle {
+  fill: none;
+  stroke: none;
+}
+
+#TimerPath {
+  stroke-width: 7px;
+  stroke: grey;
+}
 /*# sourceMappingURL=faco.css.map */
