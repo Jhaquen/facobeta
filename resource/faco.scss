@@ -61,3 +61,19 @@ body{
     width: 60vw;
     height: 40vh;
 }
+
+#TimerDiv {
+    position: relative;
+    width: 300px; //10vw;
+    height: 300px; //10vh;
+}
+
+#TimerCircle {
+    fill: none;
+    stroke: none;
+}
+
+#TimerPath {
+    stroke-width: 7px;
+    stroke: grey;
+}
