@@ -99,15 +99,17 @@ body{
 
 #mainDiv {
     display: none;
+}
+
 .NewExPopup {
-    background-color: $grey;
-    width: 300px;
-    height: 150px;
-    position: fixed;
-    box-shadow: 0px 0px 10px 0px black;
-    border-radius: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+background-color: $grey;
+width: 300px;
+height: 150px;
+position: fixed;
+box-shadow: 0px 0px 10px 0px black;
+border-radius: 0.5rem;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
 }
