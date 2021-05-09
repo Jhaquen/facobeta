@@ -43,6 +43,27 @@ function tableHeader(content,css_class,css_id) {
     return data
 }
 
+export function buttonButton(text,css_class,css_id) {
+    if (typeof(css_class)=="string" & typeof(css_id)=="string") { var button = $(`<button type="button" class="${css_class}" id="${css_id}">${text}</button>`) }
+    else if (css_class==undefined & css_id==undefined) { var button = $(`<button type="button">${text}</button>`) }
+    else if (css_class==undefined) { var button = $(`<button type="button" id="${css_id}">${text}</button>`) }
+    else if (css_id==undefined) { var button = $(`<button type="button" class="${css_class}">${text}</button>`) }
+    return button
+}
+
+export function div(content,css_class,css_id) {
+    if (typeof(css_class)=="string" & typeof(css_id)=="string") { var div = $(`<div class="${css_class}" id="${css_id}"></div>`) }
+    else if (css_class==undefined & css_id==undefined) { var div = $(`<div></div>`) }
+    else if (css_class==undefined) { var div = $(`<div id="${css_id}"></div>`) }
+    else if (css_id==undefined) { var div = $(`<div class="${css_class}"></div>`) }
+    switch (typeof(content)) {
+        case "string": div.append(content); break;
+        case "number": div.append(content); break;
+        case "object": for (let cont of content) { div.append(cont) }; break;
+    }
+    return div
+}
+
 function checkWeights(data) {
     let wheigts = []
     for (let el in data) {
@@ -116,14 +137,14 @@ export function setupTable(table,data,configdata,user,category,ex) {
         }
     }
     let InputButtonDiv = $(`<div class="InputButtonDiv"></div>`)
-    let NormalSetButton = $(`<button id="NormalSetButton">Normal Set</button>`)
+    let NormalSetButton = $(`<button type="button" id="NormalSetButton">Normal Set</button>`)
     NormalSetButton.on("click",()=>{
         let {inputRow,confirmButton} = inputRowNormalSet(table,user,configdata,category,ex)
         table.append(inputRow)
         InputButtonDiv.before(confirmButton)
         InputButtonDiv.hide()
     })
-    let DropSetButton = $(`<button id="DropSetButton">Drop Set</button>`)
+    let DropSetButton = $(`<button type="button" id="DropSetButton">Drop Set</button>`)
     DropSetButton.on("click",()=>{
         inputRowDropSet()
     })
@@ -226,4 +247,38 @@ function setupChartData(data) {
         label_array.push(new Date(data[i].date).toDateString())
     }
     return [data_array,label_array]
+}
+
+export function setupNewExPopup(pos,category,user,configdata) {
+    console.log(pos,category,user)
+    let newExPopup = div(undefined,`NewExPopup`,`NewExPopup${category}`)
+    newExPopup.css({
+        "top":`${pos.top-50}px`,
+        "left":`${pos.left+50}px`,
+    })
+    let form = div(`
+    <input type="text" placeholder="Exercise Name" id="NewExName">
+    <form>
+    <label for="ExTypeWeigt">Weight</label>
+    <input type="radio" name="ExType" id="ExTypeWeight">
+    <label for="ExTypeBody">BodyWeight</label>
+    <input type="radio" name="ExType" id="ExTypeBody">
+    </form>
+    `)
+    let cancelButton = buttonButton("cancel")
+    cancelButton.on("click",()=>{
+        newExPopup.remove()
+    })
+    let confirmButton = buttonButton("confirm")
+    confirmButton.on("click",()=>{
+        if ($("#ExTypeWeight").prop("checked")==true) {
+            configdata[0].exercise[category][$("#NewExName").val()] = ["weight1","rep1","weight2","rep2","weight3","rep3"]
+        } else if ($("#ExTypeBody").prop("checked")==true) { 
+            configdata[0].exercise[category][$("#NewExName").val()] = ["rep1","rep2","rep3"]
+        }
+        console.log(configdata)
+        newExPopup.remove()
+    })
+    newExPopup.append(form); newExPopup.append(cancelButton); newExPopup.append(confirmButton)
+    $("body").append(newExPopup)
 }

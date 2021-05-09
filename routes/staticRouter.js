@@ -25,9 +25,13 @@ app.post("/getUserExercises", (req,res)=>{
 
 app.post("/saveExerciseData", (req,res)=>{
     exModel.create(req.body,(err,created)=>{
-        if (err) { res.send({err}) } else {
-            res.send("saved")
-        }
+        if (err) { res.send({err}) } else { res.send("saved") }
+    })
+})
+
+app.post("newExercise", (req,res)=>{
+    configModel.findOneAndUpdate({user:req.body.user},{exercise:req.body.exercise},{new:true},(err,created)=>{
+        if (err) { res.send({err}) } else { res.send(JSON.stringify(created) }
     })
 })
 
