@@ -1,4 +1,4 @@
-import { setupTable, setupChart } from "./facoFunctions.js"
+import { setupTable, setupChart, setupNewExPopup, div, buttonButton } from "./facoFunctions.js"
 
 const url = "http://localhost:3000"
 let DisplayWindowActive = false
@@ -43,9 +43,8 @@ $(document).ready(()=>{
             // Setup SideBar
             console.log(configdata)
             for (let category in configdata[0].exercise) { //Warum ist data eine liste? Nur ein element
-                let categoryDiv = $(`<div class="ExeciseCategoryDiv" id="ExDiv_${category}"></div>`)
-                categoryDiv.append(`<h2 class="ExCategory" id=${category}>${category}</h2>`)
-                let linkDiv = $(`<div></div>`) //noch ein Div zum besseren anordnen der Links
+                let categoryDiv = div(`<h2 class="ExCategory" id=${category}>${category}</h2>`,"ExCategoryDiv",`ExCategoryDiv${category}`)
+                let linkDiv = div(undefined,"LinkDiv",`LinkDiv${category}`) //noch ein Div zum besseren anordnen der Links
                 for (let ex in configdata[0].exercise[category]) {
                     let exerciseLink = $(`<p class="ExLink" id="${ex}_link"></p>`).text(ex)
                     exerciseLink.data("ex",ex)
@@ -64,6 +63,11 @@ $(document).ready(()=>{
                     //Append each Exercise
                     linkDiv.append(exerciseLink)
                 }   
+                let newExButton = buttonButton("new","AddButton",`newExButton${category}`)
+                newExButton.on("click",()=>{
+                    setupNewExPopup($(`#newExButton${category}`).position(),category,user,configdata)
+                })
+                linkDiv.append(newExButton)
                 categoryDiv.append(linkDiv)
                 $("#ExerciseDiv").append(categoryDiv) 
             }
