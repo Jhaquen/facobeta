@@ -51,6 +51,28 @@ function checkWeights(data) {
     if (wheigts.every((el)=>{ return el == wheigts[0] })) { return true } else { return false }
 
 }
+
+export function formatTimer(time) {
+    //input time in sec, output in MM:SS
+    const minutes = Math.floor(time/60)
+    let seconds = time%60
+    if (seconds < 10) {seconds = `0${seconds}`}
+    return `${minutes}:${seconds}`
+}
+
+export function startTimer(timeLimit) {
+        
+    // const timeLimit = 120
+    let timePassed = 0
+    let timeLeft = timeLimit
+    
+    // take (), do {} every 1000ms = 1 second
+    timerInterval = setInterval(() => {
+        timePassed += 1
+        timeLeft = timeLimit-timePassed
+        $("#TimerTime").html(`${formatTimer(timeLeft)}`)
+    }, 1000)
+}
 /////////////////////
 // Main Functions //
 ////////////////////

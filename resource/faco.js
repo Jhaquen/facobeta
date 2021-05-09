@@ -1,10 +1,12 @@
-import { setupTable, setupChart } from "./facoFunctions.js"
+import { setupTable, setupChart, formatTimer, startTimer } from "./facoFunctions.js"
 
 const url = "http://localhost:3000"
 let DisplayWindowActive = false
 
 function DisplayWindowSetup(data,configdata,user,category,ex) {
     //DisplayWindow = Window mit Graph, Tabelle
+    $("#WelcomeDiv").hide()
+    $("#mainDiv").show()
 
     console.log(data) //Nur zum testen!
     
@@ -22,7 +24,10 @@ function DisplayWindowSetup(data,configdata,user,category,ex) {
     chartDiv.html(`<canvas id="DataChart"></canvas>`)
     let chartObject = document.getElementById("DataChart").getContext("2d")
     setupChart(chartObject,data)
+    $("#TimerTime").html(`${formatTimer(120)}`) 
 }
+
+//startTimer(120)
 
 $(document).ready(()=>{
 
