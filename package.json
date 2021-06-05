@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node app.js",
+    "DevStart": "nodemon app.js"
   },
   "author": "SB",
   "license": "ISC",
@@ -16,5 +17,8 @@
     "mongoose": "5.12.3",
     "ejs": "3.1.6",
     "body-parser": "1.19.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }
