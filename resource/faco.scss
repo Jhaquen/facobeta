@@ -85,9 +85,24 @@ body{
     stroke: none;
 }
 
-#TimerPath {
+#TimerPathElapsed {
     stroke-width: 7px;
     stroke: grey;
+}
+
+#TimerPathRemaining {
+    stroke-width: 7px;
+    // stroke-linecap: round;
+    // animation start at top
+    transform: rotate(90deg);
+    transform-origin: center;
+    transition: 1s linear all;
+    stroke: currentColor
+}
+
+#TimerSvg {
+    // flip svg -> animation moves left to right
+    transform: scaleX(-1)
 }
 
 #LowDiv {

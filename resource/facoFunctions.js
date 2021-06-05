@@ -81,19 +81,35 @@ export function formatTimer(time) {
     return `${minutes}:${seconds}`
 }
 
-export function startTimer(timeLimit) {
-        
-    // const timeLimit = 120
+var timerInterval = null 
+function startTimer(timeLimit) {
+    
+    clearInterval(timerInterval)
     let timePassed = 0
     let timeLeft = timeLimit
+
+    const color_code = {
+        info: {
+            color: "green"
+        }
+    }
+    $("#TimerPathRemaining").  color_code.info.color
     
     // take (), do {} every 1000ms = 1 second
     timerInterval = setInterval(() => {
         timePassed += 1
         timeLeft = timeLimit-timePassed
-        $("#TimerTime").html(`${formatTimer(timeLeft)}`)
+        if (timeLeft>0) {
+            $("#TimerTime").html(`${formatTimer(timeLeft)}`)
+        } else {
+            $("#TimerTime").css("color","red")
+            $("#TimerTime").html(`${formatTimer(timeLeft)}`)
+            clearInterval(timerInterval)
+        }
     }, 1000)
 }
+
+
 /////////////////////
 // Main Functions //
 ////////////////////
@@ -194,7 +210,9 @@ function inputRowNormalSet (table,user,configdata,category,ex) {
     let input_types = ["weight"]
     for (let el of configdata[0].exercise[category][ex]) {
         if (el.match(/rep\d/)) {
-            input_row.append(tableData(`<input type="number" min="1" placeholder="${el}" class="NewRowInput" id="${el}Input">`))
+            let input = $(`<input type="number" min="1" placeholder="${el}" class="NewRowInput" id="${el}Input">`)
+            input.on("input",()=>{ startTimer(10) })
+            input_row.append(tableData(input))
             input_types.push(el)
         } 
     }
