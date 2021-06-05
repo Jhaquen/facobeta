@@ -1,4 +1,4 @@
-import { setupTable, setupChart, formatTimer, startTimer, setupNewExPopup, div, buttonButton } from "./facoFunctions.js"
+import { setupTable, setupChart, formatTimer, setupNewExPopup, div, buttonButton } from "./facoFunctions.js"
 
 const url = "http://localhost:3000"
 let DisplayWindowActive = false
@@ -20,14 +20,13 @@ function DisplayWindowSetup(data,configdata,user,category,ex) {
         chartDiv.children().remove()
     } else { DisplayWindowActive = true }
     
+    $("#TimerTime").html(`${formatTimer(120)}`)
     setupTable(table,data,configdata,user,category,ex)
     chartDiv.html(`<canvas id="DataChart"></canvas>`)
     let chartObject = document.getElementById("DataChart").getContext("2d")
     setupChart(chartObject,data)
-    $("#TimerTime").html(`${formatTimer(120)}`) 
 }
 
-//startTimer(120)
 
 $(document).ready(()=>{
 
