@@ -98,7 +98,33 @@ export function startTimer(timeLimit) {
 // Main Functions //
 ////////////////////
 
-export function setupTable(table,data,configdata,user,category,ex) {
+var DisplayWindowActive = false
+
+export function DisplayWindowSetup(data,configdata,user,category,ex) {
+    //DisplayWindow = Window mit Graph, Tabelle
+    $("#WelcomeDiv").hide()
+    $("#mainDiv").show()
+
+    console.log(data) //Nur zum testen!
+    
+    let table = $("#ExerciseTable")
+    let chartDiv = $("#ChartDiv")
+    
+    if (DisplayWindowActive==true) {
+        // reloads the chart+table window by removing all elements
+        table.children().remove()
+        $(".InputButtonDiv").remove()
+        chartDiv.children().remove()
+    } else { DisplayWindowActive = true }
+    
+    setupTable(table,data,configdata,user,category,ex)
+    chartDiv.html(`<canvas id="DataChart"></canvas>`)
+    let chartObject = document.getElementById("DataChart").getContext("2d")
+    setupChart(chartObject,data)
+    $("#TimerTime").html(`${formatTimer(120)}`) 
+}
+
+function setupTable(table,data,configdata,user,category,ex) {
     // creates a new table row for the last 3 entries in exercise data. last 3 rows because i is data.length-3 when forloop starts
     // the confusing mess of symbols in the for loop initialization checks if data.length is greater than 3 and assings i data.length-3
     // if its greater than 3. else i is 0
@@ -223,7 +249,7 @@ function inputRowDropSet() {
     console.log("nothing to see here")
 }
 
-export function setupChart (chartContainer,data) {
+function setupChart (chartContainer,data) {
     let chartData = setupChartData(data)
     new Chart(chartContainer, {
         type: "line",
@@ -276,7 +302,22 @@ export function setupNewExPopup(pos,category,user,configdata) {
         } else if ($("#ExTypeBody").prop("checked")==true) { 
             configdata[0].exercise[category][$("#NewExName").val()] = ["rep1","rep2","rep3"]
         }
-        console.log(configdata)
+        fetch(url+"/newExercise", {
+            method:"POST",
+            headers:{"Content-type":"application/json"},
+            body:JSON.stringify({user:user,exercise:configdata[0].exercise}) })
+        let newLink = $(`<p class="ExLink" id="${$("#NewExName").val()}_link"></p>`).text($("#NewExName").val())
+        newLink.on("click",()=>{
+            // get data of exercise
+            fetch(url+"/getExerciseData", {
+                method:"POST",
+                headers:{"Content-type":"application/json"},
+                body:JSON.stringify({
+                    user:user,
+                    exercise:$("#NewExName").val()
+                })
+            }).then(response => response.json()).then(data => { DisplayWindowSetup(data,configdata,user,category,$("#NewExName").val()) }) })
+        $(`#LinkDiv${category}`).append(newLink)
         newExPopup.remove()
     })
     newExPopup.append(form); newExPopup.append(cancelButton); newExPopup.append(confirmButton)

@@ -1,31 +1,7 @@
-import { setupTable, setupChart, formatTimer, startTimer, setupNewExPopup, div, buttonButton } from "./facoFunctions.js"
+import { DisplayWindowSetup, setupNewExPopup, div, buttonButton } from "./facoFunctions.js"
 
 const url = "http://localhost:3000"
 let DisplayWindowActive = false
-
-function DisplayWindowSetup(data,configdata,user,category,ex) {
-    //DisplayWindow = Window mit Graph, Tabelle
-    $("#WelcomeDiv").hide()
-    $("#mainDiv").show()
-
-    console.log(data) //Nur zum testen!
-    
-    let table = $("#ExerciseTable")
-    let chartDiv = $("#ChartDiv")
-    
-    if (DisplayWindowActive==true) {
-        // reloads the chart+table window by removing all elements
-        table.children().remove()
-        $(".InputButtonDiv").remove()
-        chartDiv.children().remove()
-    } else { DisplayWindowActive = true }
-    
-    setupTable(table,data,configdata,user,category,ex)
-    chartDiv.html(`<canvas id="DataChart"></canvas>`)
-    let chartObject = document.getElementById("DataChart").getContext("2d")
-    setupChart(chartObject,data)
-    $("#TimerTime").html(`${formatTimer(120)}`) 
-}
 
 //startTimer(120)
 
