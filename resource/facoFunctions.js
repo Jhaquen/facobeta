@@ -88,12 +88,15 @@ function startTimer(timeLimit) {
     let timePassed = 0
     let timeLeft = timeLimit
 
+    /**
+    das hat noch nicht funktioniert
     const color_code = {
         info: {
             color: "green"
         }
     }
     $("#TimerPathRemaining").  color_code.info.color
+    */
     
     // take (), do {} every 1000ms = 1 second
     timerInterval = setInterval(() => {
@@ -116,7 +119,7 @@ function startTimer(timeLimit) {
 
 var DisplayWindowActive = false
 
-export function DisplayWindowSetup(data,configdata,user,category,ex) {
+export function DisplayWindowSetup(data,exconfig,user,ex) {
     //DisplayWindow = Window mit Graph, Tabelle
     $("#WelcomeDiv").hide()
     $("#mainDiv").show()
@@ -133,14 +136,14 @@ export function DisplayWindowSetup(data,configdata,user,category,ex) {
         chartDiv.children().remove()
     } else { DisplayWindowActive = true }
     
-    setupTable(table,data,configdata,user,category,ex)
+    setupTable(table,data,exconfig,user,ex)
     chartDiv.html(`<canvas id="DataChart"></canvas>`)
     let chartObject = document.getElementById("DataChart").getContext("2d")
     setupChart(chartObject,data)
     $("#TimerTime").html(`${formatTimer(120)}`) 
 }
 
-function setupTable(table,data,configdata,user,category,ex) {
+function setupTable(table,data,exconfig,user,ex) {
     // creates a new table row for the last 3 entries in exercise data. last 3 rows because i is data.length-3 when forloop starts
     // the confusing mess of symbols in the for loop initialization checks if data.length is greater than 3 and assings i data.length-3
     // if its greater than 3. else i is 0
@@ -162,7 +165,7 @@ function setupTable(table,data,configdata,user,category,ex) {
                 tableData(date),
                 tableData(data[i].data.weight1)
             ])
-            for (let el of configdata[0].exercise[category][ex]) {
+            for (let el of exconfig) {
                 if (el.match(/rep\d/)) { newRow.append(tableData(data[i].data[el])) }
             }
             table.append(newRow)
@@ -171,7 +174,7 @@ function setupTable(table,data,configdata,user,category,ex) {
                 tableData(date),
                 tableData("-")
             ])
-            for (let j=0; j<configdata[0].exercise[category][ex].length-1; j+=2) {
+            for (let j=0; j<exconfig.length-1; j+=2) {
                 // this shit gets the i-th key of data[i].data and then retrieves the correspondig value
                 newRow.append(tableData(`${data[i].data[Object.keys(data[i].data)[j]]} x ${data[i].data[Object.keys(data[i].data)[j+1]]}`))
             }
@@ -181,9 +184,10 @@ function setupTable(table,data,configdata,user,category,ex) {
     let InputButtonDiv = $(`<div class="InputButtonDiv"></div>`)
     let NormalSetButton = $(`<button type="button" id="NormalSetButton">Normal Set</button>`)
     NormalSetButton.on("click",()=>{
-        let {inputRow,confirmButton} = inputRowNormalSet(table,user,configdata,category,ex)
+        let {inputRow,confirmButton,cancelButton} = inputRowNormalSet(table,user,exconfig,ex)
         table.append(inputRow)
         InputButtonDiv.before(confirmButton)
+        InputButtonDiv.before(cancelButton)
         InputButtonDiv.hide()
     })
     let DropSetButton = $(`<button type="button" id="DropSetButton">Drop Set</button>`)
@@ -196,7 +200,7 @@ function setupTable(table,data,configdata,user,category,ex) {
     
 }
 
-function inputRowNormalSet (table,user,configdata,category,ex) {
+function inputRowNormalSet (table,user,exconfig,ex) {
     // Creates a Row (input_row) containing number inputs (input type="number") and appends it to the Table
     let today = new Date().toDateString()
     let today_ISO = new Date().toISOString()
@@ -208,16 +212,17 @@ function inputRowNormalSet (table,user,configdata,category,ex) {
     // input_types is an array of all input field ids (kind of). counts how many sets (rep1,2,...) the exercise has
     // possibility to add more sets later?
     let input_types = ["weight"]
-    for (let el of configdata[0].exercise[category][ex]) {
+    for (let el of exconfig) {
         if (el.match(/rep\d/)) {
             let input = $(`<input type="number" min="1" placeholder="${el}" class="NewRowInput" id="${el}Input">`)
-            input.on("input",()=>{ startTimer(10) })
+            input.on("input",()=>{ startTimer(10) }) // should be 120. maybe diffrent for exercise? yes! -> more fields in db needed
             input_row.append(tableData(input))
             input_types.push(el)
         } 
     }
     
-    let confirm_button = $(`<button type="button" id="confirmButton">Confirm</button>`)
+    //let confirm_button = $(`<button type="button" id="confirmButton">Confirm</button>`)
+    let confirm_button = buttonButton("Confirm","secondaryButton","confirmButton")
     confirm_button.on("click",()=>{
         // this does only happen if the confirm button is clicked! To understand the code u can skip this for now
         let newDocData = {}
@@ -259,8 +264,9 @@ function inputRowNormalSet (table,user,configdata,category,ex) {
             table.append(new_row); input_row.remove(); confirm_button.remove(); $(".InputButtonDiv").show() 
         })
     })
-    // append the input row
-    return {inputRow:input_row, confirmButton:confirm_button}
+    let cancel_button = buttonButton("cancel","secondaryButton","cancelButton")
+    // append the input row...later
+    return {inputRow:input_row, confirmButton:confirm_button, cancelButton:cancel_button}
 }
 
 function inputRowDropSet() {
@@ -315,16 +321,24 @@ export function setupNewExPopup(pos,category,user,configdata) {
     })
     let confirmButton = buttonButton("confirm")
     confirmButton.on("click",()=>{
+        let newExName = $("#NewExName").val()
         if ($("#ExTypeWeight").prop("checked")==true) {
-            configdata[0].exercise[category][$("#NewExName").val()] = ["weight1","rep1","weight2","rep2","weight3","rep3"]
+            configdata[0].exercise[category][newExName] = {
+                exconfig: ["weight1","rep1","weight2","rep2","weight3","rep3"],
+                timeconfig: 120
+            }
         } else if ($("#ExTypeBody").prop("checked")==true) { 
-            configdata[0].exercise[category][$("#NewExName").val()] = ["rep1","rep2","rep3"]
+            configdata[0].exercise[category][newExName] = {
+                exconfig: ["rep1","rep2","rep3"],
+                timeconfig: 120
+            }
         }
         fetch(url+"/newExercise", {
             method:"POST",
             headers:{"Content-type":"application/json"},
             body:JSON.stringify({user:user,exercise:configdata[0].exercise}) })
-        let newLink = $(`<p class="ExLink" id="${$("#NewExName").val()}_link"></p>`).text($("#NewExName").val())
+            let newLink = $(`<p class="ExLink" id="${newExName}_link"></p>`).text(newExName)
+        let exconfig = configdata[0].exercise[category][newExName].exconfig
         newLink.on("click",()=>{
             // get data of exercise
             fetch(url+"/getExerciseData", {
@@ -332,9 +346,9 @@ export function setupNewExPopup(pos,category,user,configdata) {
                 headers:{"Content-type":"application/json"},
                 body:JSON.stringify({
                     user:user,
-                    exercise:$("#NewExName").val()
+                    exercise:newExName
                 })
-            }).then(response => response.json()).then(data => { DisplayWindowSetup(data,configdata,user,category,$("#NewExName").val()) }) })
+            }).then(response => response.json()).then(data => { DisplayWindowSetup(data,exconfig,user,category,newExName) }) })
         $(`#LinkDiv${category}`).append(newLink)
         newExPopup.remove()
     })

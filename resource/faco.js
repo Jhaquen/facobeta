@@ -26,7 +26,8 @@ $(document).ready(()=>{
                 let linkDiv = div(undefined,"LinkDiv",`LinkDiv${category}`) //noch ein Div zum besseren anordnen der Links
                 for (let ex in configdata[0].exercise[category]) {
                     let exerciseLink = $(`<p class="ExLink" id="${ex}_link"></p>`).text(ex)
-                    exerciseLink.data("ex",ex)
+                    //exerciseLink.data("ex",ex)
+                    let exconfig = configdata[0].exercise[category][ex].exconfig
                     // Exercise = Link: If clicked on -> DisplayWindowSetup for this Exercise 
                     exerciseLink.on("click",()=>{
                         // get data of exercise
@@ -37,7 +38,7 @@ $(document).ready(()=>{
                                 user:user,
                                 exercise:ex
                             })
-                        }).then(response => response.json()).then(data => { DisplayWindowSetup(data,configdata,user,category,ex) })
+                        }).then(response => response.json()).then(data => { DisplayWindowSetup(data,exconfig,user,category,ex) })
                     })
                     //Append each Exercise
                     linkDiv.append(exerciseLink)
