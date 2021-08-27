@@ -43,6 +43,7 @@ function tableHeader(content,css_class,css_id) {
     return data
 }
 
+/*
 export function buttonButton(text,css_class,css_id) {
     if (typeof(css_class)=="string" & typeof(css_id)=="string") { var button = $(`<button type="button" class="${css_class}" id="${css_id}">${text}</button>`) }
     else if (css_class==undefined & css_id==undefined) { var button = $(`<button type="button">${text}</button>`) }
@@ -50,8 +51,9 @@ export function buttonButton(text,css_class,css_id) {
     else if (css_id==undefined) { var button = $(`<button type="button" class="${css_class}">${text}</button>`) }
     return button
 }
+*/
 
-
+/*
 export function div(content,css_class,css_id) {
     if (typeof(css_class)=="string" & typeof(css_id)=="string") { var div = $(`<div class="${css_class}" id="${css_id}"></div>`) }
     else if (css_class==undefined & css_id==undefined) { var div = $(`<div></div>`) }
@@ -64,40 +66,7 @@ export function div(content,css_class,css_id) {
     }
     return div
 }
-
-export function HTMLObject(type,content,css_class,css_id) {
-    
-    // create HTML Element
-    let object = document.createElement(type)
-    // set attributes
-    let props = {"class":css_class, "id":css_id}
-    for (let prop in props) {
-        if (props[prop]!=undefined) {
-            object.setAttribute(prop,props[prop])
-        }
-    }
-    // set content
-    if (content!=undefined) {
-        if (type=="p" | /h\d/.test(type) | type=="button") {
-            object.innerHTML = content
-        } else {
-            switch (typeof(content)) {
-                case "string": case "number": 
-                    object.append(content)
-                    break
-                case "object": 
-                    if (Array.isArray(content)) {
-                        for (let c of content) { object.append(c) }
-                    } else {
-                        object.append(content)
-                    }
-                    break
-            }
-        }
-    }
-    return object
-
-}
+*/
 
 function checkWeights(data) {
     let wheigts = []
