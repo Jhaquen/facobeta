@@ -1,16 +1,22 @@
-import {  DisplayWindowSetup, setupNewExPopup, div, buttonButton } from "./facoFunctions.js"
+import {  DisplayWindowSetup, setupNewExPopup, div, HTMLObject, buttonButton } from "./facoFunctions.js"
 
 const url = "http://localhost:3000"
 let DisplayWindowActive = false
 
-$(document).ready(()=>{
+window.onload = function() {
 
-    $("#mainpage").hide()
-    
-    $("#LogInButton").on("click", ()=>{
+    let loginDiv = document.getElementById("LoginDiv")
+    let logInButton = document.getElementById("LogInButton")
+    let usernameInput = document.getElementById("username")
+    let mainpage = document.getElementById("mainpage")
+    let WelcomeMessage = document.getElementById("WelcomeMessage")
+    let ExerciseDiv = document.getElementById("ExerciseDiv")
+
+    mainpage.style.visibility = "hidden"
+    logInButton.addEventListener("click",()=>{
         
-        let user = $("#username").val()
-        $("#WelcomeMessage").text("Hey "+user)
+        let user = usernameInput.value
+        WelcomeMessage.innerHTML = "Hey "+user
 
         fetch(url+"/getUserExercises", {
             method:"POST",
@@ -22,14 +28,13 @@ $(document).ready(()=>{
             // Setup SideBar
             console.log(configdata)
             for (let category in configdata[0].exercise) { //Warum ist data eine liste? Nur ein element
-                let categoryDiv = div(`<h2 class="ExCategory" id=${category}>${category}</h2>`,"ExCategoryDiv",`ExCategoryDiv${category}`)
-                let linkDiv = div(undefined,"LinkDiv",`LinkDiv${category}`) //noch ein Div zum besseren anordnen der Links
+                let categoryDiv = HTMLObject("div", HTMLObject("h2",undefined,"ExCategory",category), "ExCategoryDiv", `ExCategoryDiv${category}`)
+                let linkDiv = HTMLObject("div",undefined,"LinkDiv",`LinkDiv${category}`) //noch ein Div zum besseren anordnen der Links
                 for (let ex in configdata[0].exercise[category]) {
-                    let exerciseLink = $(`<p class="ExLink" id="${ex}_link"></p>`).text(ex)
-                    //exerciseLink.data("ex",ex)
+                    let exerciseLink = HTMLObject("p",ex,"ExLink",`${ex}Link`)
                     let exconfig = configdata[0].exercise[category][ex].exconfig
                     // Exercise = Link: If clicked on -> DisplayWindowSetup for this Exercise 
-                    exerciseLink.on("click",()=>{
+                    exerciseLink.addEventListener("click",()=>{
                         // get data of exercise
                         fetch(url+"/getExerciseData", {
                             method:"POST",
@@ -43,17 +48,17 @@ $(document).ready(()=>{
                     //Append each Exercise
                     linkDiv.append(exerciseLink)
                 }   
-                let newExButton = buttonButton("new","AddButton",`newExButton${category}`)
-                newExButton.on("click",()=>{
+                let newExButton = HTMLObject("button","new","AddButton",`newExButton${category}`)
+                newExButton.addEventListener("click",()=>{
                     setupNewExPopup($(`#newExButton${category}`).position(),category,user,configdata)
                 })
                 linkDiv.append(newExButton)
                 categoryDiv.append(linkDiv)
-                $("#ExerciseDiv").append(categoryDiv) 
+                ExerciseDiv.append(categoryDiv)
             }
 
         })
-        $("#LoginDiv").fadeOut(400)
-        $("#mainpage").fadeIn(200)
+        loginDiv.style.visibility = "hidden"
+        mainpage.style.visibility = "visible"
     })
-})
+}
