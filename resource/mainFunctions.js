@@ -1,4 +1,4 @@
-export function HTMLObject(type,content,css_class,css_id) {
+export function HTMLComponent(type,content,css_class,css_id) {
     
     // create HTML Element
     let object = document.createElement(type)

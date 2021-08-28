@@ -1,4 +1,4 @@
-import { HTMLObject, SetAttributes } from "./mainFunctions.js"
+import { HTMLComponent, SetAttributes } from "./mainFunctions.js"
 
 export class Timer {
 
@@ -27,9 +27,8 @@ export class Timer {
             "viewBox":"0 0 100 100",
             "id":"TimerSvg"
         })
-        this.time = HTMLObject("span",this.formatTime(this.timelimit),"timer","TimerTime")
-        this.div = HTMLObject("div",[this.svgWrapper,this.time],"timer","TimerDiv")
-        console.log(this.div)
+        this.time = HTMLComponent("span",this.formatTime(this.timelimit),"timer","TimerTime")
+        this.div = HTMLComponent("div",[this.svgWrapper,this.time],"timer","TimerDiv")
 
         this.timerInterval = undefined
 
@@ -71,7 +70,7 @@ export class Timer {
         return `${minutes}:${seconds}`
     }
 
-    get Element() {
+    get Component() {
         return this.div
     }
 }

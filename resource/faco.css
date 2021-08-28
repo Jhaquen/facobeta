@@ -63,7 +63,7 @@ body {
           justify-content: space-evenly;
 }
 
-#ExerciseDiv {
+#SideBarDiv {
   position: absolute;
   height: 100vh;
   left: 0px;
@@ -71,7 +71,7 @@ body {
   width: -moz-fit-content;
   width: fit-content;
   padding: 20px;
-  background-color: #d6fffd;
+  background-color: #b8b8b8;
   -webkit-box-shadow: 0px 3px 10px 0px #000000;
           box-shadow: 0px 3px 10px 0px #000000;
 }

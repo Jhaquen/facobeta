@@ -1,6 +1,6 @@
 import {  DisplayWindowSetup, setupNewExPopup} from "./facoFunctions.js"
-import { HTMLObject } from "./mainFunctions.js"
-import { sideBarSetup } from "./sideBar.js"
+import { HTMLComponent } from "./mainFunctions.js"
+import { SideBar } from "./sideBar.js"
 import { Timer } from "./timer.js"
 
 const url = "http://localhost:3000"
@@ -17,22 +17,44 @@ window.onload = function() {
     let lowerDiv = document.getElementById("lowerDiv")
 
     mainpage.style.visibility = "hidden"
-    logInButton.addEventListener("click",()=>{
+
+
+    logInButton.addEventListener("click", async function() {
         
         let user = usernameInput.value
         WelcomeMessage.innerHTML = "Hey "+user
 
-        fetch(url+"/getUserExercises", {
+        let configdata = await fetch(url+"/getUserExercises", {
             method:"POST",
             headers:{"Content-type":"application/json"},
             body:JSON.stringify({
                 user:user
             })
-        }).then(response => response.json()).then(configdata => { sideBarSetup(configdata[0],user,ExerciseDiv) })
+        }).then(response => response.json())
+        let sideBar = new SideBar(configdata)
+        mainpage.prepend(sideBar.Component)
+        for (let category in sideBar.Links) {
+            for (let ex in sideBar.Links[category]) {
+                sideBar.Links[category][ex].addEventListener("click",()=>CreateExWindowLink(user,configdata[0].exercise[category][ex].exconfig,category,ex))
+            }
+        }
+
         let timer = new Timer(200)
-        lowerDiv.append(timer.Element)
+        lowerDiv.append(timer.Component)
         
         loginDiv.style.visibility = "hidden"
         mainpage.style.visibility = "visible"
     })
+}
+
+async function CreateExWindowLink(user,exconfig,category,ex) {
+
+    fetch(url+"/getExerciseData", {
+        method:"POST",
+        headers:{"Content-type":"application/json"},
+        body:JSON.stringify({
+            user:user,
+            exercise:ex
+        })
+    }).then(response => response.json()).then(data => { DisplayWindowSetup(data,exconfig,user,category,ex) })
 }

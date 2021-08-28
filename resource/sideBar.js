@@ -1,14 +1,15 @@
-import { HTMLObject } from "./mainFunctions.js"
+import { HTMLComponent } from "./mainFunctions.js"
 import {  DisplayWindowSetup, setupNewExPopup} from "./facoFunctions.js"
 const url = "http://localhost:3000"
 
+/*
 export function sideBarSetup(configdata,user,ExerciseDiv) {
     
     for (let category in configdata.exercise) { //Warum ist data eine liste? Nur ein element
-        let categoryDiv = HTMLObject("div", HTMLObject("h2",undefined,"ExCategory",category), "ExCategoryDiv", `ExCategoryDiv${category}`)
-        let linkDiv = HTMLObject("div",undefined,"LinkDiv",`LinkDiv${category}`) //noch ein Div zum besseren anordnen der Links
+        let categoryDiv = HTMLComponent("div", HTMLComponent("h2",undefined,"ExCategory",category), "ExCategoryDiv", `ExCategoryDiv${category}`)
+        let linkDiv = HTMLComponent("div",undefined,"LinkDiv",`LinkDiv${category}`) //noch ein Div zum besseren anordnen der Links
         for (let ex in configdata.exercise[category]) {
-            let exerciseLink = HTMLObject("p",ex,"ExLink",`${ex}Link`)
+            let exerciseLink = HTMLComponent("p",ex,"ExLink",`${ex}Link`)
             let exconfig = configdata.exercise[category][ex].exconfig
             // Exercise = Link: If clicked on -> DisplayWindowSetup for this Exercise 
             exerciseLink.addEventListener("click",()=>{
@@ -25,12 +26,57 @@ export function sideBarSetup(configdata,user,ExerciseDiv) {
             //Append each Exercise
             linkDiv.append(exerciseLink)
         }   
-        let newExButton = HTMLObject("button","new","AddButton",`newExButton${category}`)
+        let newExButton = HTMLComponent("button","new","AddButton",`newExButton${category}`)
         newExButton.addEventListener("click",()=>{
             setupNewExPopup($(`#newExButton${category}`).position(),category,user,configdata)
         })
         linkDiv.append(newExButton)
         categoryDiv.append(linkDiv)
         ExerciseDiv.append(categoryDiv)
+    }
+}
+*/
+
+export class SideBar {
+
+    constructor(configdata) {
+        this.configdata = configdata[0]
+        this.setup()
+    }
+
+    setup() {
+
+        this.SideBarDiv = HTMLComponent("div",undefined,"SideBar","SideBarDiv")
+        
+        this.categoryDivs = {}
+        this.links = {}
+        
+        for (let category in this.configdata.exercise) {
+            // create one Div per category containing title and links
+            let header = HTMLComponent("h2",category,"ExCategoryHeader Sidebar",`ExCategoryHeader${category}`)
+            let categoryDiv = HTMLComponent("div", header, "ExCategoryDiv SideBar", `ExCategoryDiv${category}`)
+            let linkDiv = HTMLComponent("div",undefined,"LinkDiv SideBar",`LinkDiv${category}`) //noch ein Div zum besseren anordnen der Links
+            // create links (without functionality) and append to exLinks
+            for (let ex in this.configdata.exercise[category]) {
+                let exerciseLink = HTMLComponent("p",ex,"ExLink",`${ex}Link`)
+                if (Object.keys(this.links).includes(category)) { this.links[category][ex] = exerciseLink }
+                else { this.links[category] = {}; this.links[category][ex] = exerciseLink }
+                linkDiv.append(exerciseLink)
+            }
+            categoryDiv.append(linkDiv) //append links to category
+            // sort category and append to sidebar
+            this.categoryDivs[category] = categoryDiv 
+            this.SideBarDiv.append(categoryDiv)
+        }
+    }
+
+    get Component() {
+        return this.SideBarDiv
+    }
+    get Categories() {
+        return this.categoryDivs
+    }
+    get Links() {
+        return this.links
     }
 }
