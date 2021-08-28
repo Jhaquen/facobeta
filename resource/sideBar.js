@@ -1,5 +1,4 @@
 import { HTMLComponent } from "./mainFunctions.js"
-import {  DisplayWindowSetup, setupNewExPopup} from "./facoFunctions.js"
 const url = "http://localhost:3000"
 
 /*
@@ -50,11 +49,15 @@ export class SideBar {
         
         this.categoryDivs = {}
         this.links = {}
+        this.newExButtons = {}
         
         for (let category in this.configdata.exercise) {
-            // create one Div per category containing title and links
+            // create Divs per category containing title+newExButton and links
             let header = HTMLComponent("h2",category,"ExCategoryHeader Sidebar",`ExCategoryHeader${category}`)
-            let categoryDiv = HTMLComponent("div", header, "ExCategoryDiv SideBar", `ExCategoryDiv${category}`)
+            let newExButton = HTMLComponent("button","new","ExCategoryHeader Sidebar NewButton",`ExCategoryNewButton${category}`)
+            this.newExButtons[category] = newExButton
+            let headerDiv = HTMLComponent("div",[header,newExButton],"ExCategoryHeader Sidebar", `ExCategoryHeaderDiv${category}`)
+            let categoryDiv = HTMLComponent("div", headerDiv, "ExCategoryDiv SideBar", `ExCategoryDiv${category}`)
             let linkDiv = HTMLComponent("div",undefined,"LinkDiv SideBar",`LinkDiv${category}`) //noch ein Div zum besseren anordnen der Links
             // create links (without functionality) and append to exLinks
             for (let ex in this.configdata.exercise[category]) {
@@ -78,5 +81,8 @@ export class SideBar {
     }
     get Links() {
         return this.links
+    }
+    get NewExButtons() {
+        return this.newExButtons
     }
 }

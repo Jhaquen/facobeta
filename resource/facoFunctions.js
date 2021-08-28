@@ -76,6 +76,7 @@ function checkWeights(data) {
     if (wheigts.every((el)=>{ return el == wheigts[0] })) { return true } else { return false }
 
 }
+/*
 
 export function formatTimer(time) {
     //input time in sec, output in MM:SS
@@ -100,7 +101,6 @@ function startTimer(timeLimit) {
         }
     }
     $("#TimerPathRemaining").  color_code.info.color
-    */
     
     // take (), do {} every 1000ms = 1 second
     timerInterval = setInterval(() => {
@@ -115,6 +115,7 @@ function startTimer(timeLimit) {
         }
     }, 1000)
 }
+*/
 
 
 /////////////////////
@@ -303,6 +304,7 @@ function setupChartData(data) {
     return [data_array,label_array]
 }
 
+/*
 export function setupNewExPopup(pos,category,user,configdata) {
     console.log(pos,category,user)
     let newExPopup = div(undefined,`NewExPopup`,`NewExPopup${category}`)
@@ -359,3 +361,4 @@ export function setupNewExPopup(pos,category,user,configdata) {
     newExPopup.append(form); newExPopup.append(cancelButton); newExPopup.append(confirmButton)
     $("body").append(newExPopup)
 }
+*/
