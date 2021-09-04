@@ -1,0 +1,15 @@
+@import "variables";
+
+.ExDataTable{
+    td, th {
+        width: 5em;
+    }
+}
+
+input::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+} 
+.NewRowInput {
+    width: 80%;
+    text-align: center;
+}

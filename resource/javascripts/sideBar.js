@@ -1,4 +1,5 @@
 import { HTMLComponent } from "./mainFunctions.js"
+import { SVG } from "./svgCollection.js"
 const url = "http://localhost:3000"
 
 /*
@@ -54,9 +55,9 @@ export class SideBar {
         for (let category in this.configdata.exercise) {
             // create Divs per category containing title+newExButton and links
             let header = HTMLComponent("h2",category,"ExCategoryHeader Sidebar",`ExCategoryHeader${category}`)
-            let newExButton = HTMLComponent("button","new","ExCategoryHeader Sidebar NewButton",`ExCategoryNewButton${category}`)
+            let newExButton = HTMLComponent("button",SVG.Plus(0.5),"ExCategoryHeader Sidebar NewButton",`ExCategoryNewButton${category}`)
             this.newExButtons[category] = newExButton
-            let headerDiv = HTMLComponent("div",[header,newExButton],"ExCategoryHeader Sidebar", `ExCategoryHeaderDiv${category}`)
+            let headerDiv = HTMLComponent("div",[header,newExButton],"ExCategoryHeaderDiv Sidebar", `ExCategoryHeaderDiv${category}`)
             let categoryDiv = HTMLComponent("div", headerDiv, "ExCategoryDiv SideBar", `ExCategoryDiv${category}`)
             let linkDiv = HTMLComponent("div",undefined,"LinkDiv SideBar",`LinkDiv${category}`) //noch ein Div zum besseren anordnen der Links
             // create links (without functionality) and append to exLinks

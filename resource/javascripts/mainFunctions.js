@@ -1,5 +1,4 @@
-export function HTMLComponent(type,content,css_class,css_id) {
-    
+export function HTMLComponent(type,content,css_class,css_id,attrs) {   
     // create HTML Element
     let object = document.createElement(type)
     // set attributes
@@ -9,10 +8,12 @@ export function HTMLComponent(type,content,css_class,css_id) {
             object.setAttribute(prop,props[prop])
         }
     }
+    if (attrs!=undefined) { SetAttributes(object,attrs) }
     // set content
-    if (content!=undefined) {
-        if (type=="p" | /h\d/.test(type) | type=="button") {
-            object.innerHTML = content
+    if (content!=undefined || content=="") {
+        if (type=="p" || /h\d/.test(type) || type=="button") {
+            if (typeof(content)!="object") { object.innerHTML = content }
+            else { object.append(content) }
         } else {
             switch (typeof(content)) {
                 case "string": case "number": 
@@ -29,7 +30,6 @@ export function HTMLComponent(type,content,css_class,css_id) {
         }
     }
     return object
-
 }
 
 export function SetAttributes(el,attrs) {

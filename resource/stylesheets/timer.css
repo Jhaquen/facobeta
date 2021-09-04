@@ -1,0 +1,49 @@
+#TimerDiv {
+  position: relative;
+  width: 10rem;
+  height: 10rem;
+}
+
+#TimerTime {
+  width: inherit;
+  height: inherit;
+  position: absolute;
+  top: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: 2rem;
+}
+
+#TimerCircle {
+  fill: none;
+  stroke: none;
+}
+
+#TimerPathElapsed {
+  stroke-width: 7px;
+  stroke: grey;
+}
+
+#TimerPathRemaining {
+  stroke-width: 7px;
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+  -webkit-transform-origin: center;
+          transform-origin: center;
+  -webkit-transition: 1s linear all;
+  transition: 1s linear all;
+  stroke: currentColor;
+}
+
+#TimerSvg {
+  -webkit-transform: scaleX(-1);
+          transform: scaleX(-1);
+}
+/*# sourceMappingURL=timer.css.map */

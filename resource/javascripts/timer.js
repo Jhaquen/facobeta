@@ -4,7 +4,7 @@ export class Timer {
 
     constructor(timelimit) {
 
-        this.timelimit = timelimit
+        this.timeLimit = parseInt(timelimit)
         this.svgWrapper = document.createElementNS("http://www.w3.org/2000/svg","svg")
         this.progressBarWrapper = document.createElementNS("http://www.w3.org/2000/svg","g")
         this.progressBarElapsed = document.createElementNS("http://www.w3.org/2000/svg","circle")
@@ -27,17 +27,17 @@ export class Timer {
             "viewBox":"0 0 100 100",
             "id":"TimerSvg"
         })
-        this.time = HTMLComponent("span",this.formatTime(this.timelimit),"timer","TimerTime")
+        this.time = HTMLComponent("span",this.formatTime(this.timeLimit),"timer","TimerTime")
         this.div = HTMLComponent("div",[this.svgWrapper,this.time],"timer","TimerDiv")
 
         this.timerInterval = undefined
 
     }
 
-    startTimer() {
+    start() {
         clearInterval(this.timerInterval)
         let timePassed = 0
-        let timeLeft = timeLimit
+        let timeLeft = this.timeLimit
     
         /**
         das hat noch nicht funktioniert
@@ -52,12 +52,13 @@ export class Timer {
         // take (), do {} every 1000ms = 1 second
         this.timerInterval = setInterval(() => {
             timePassed += 1
-            timeLeft = timeLimit-timePassed
+            timeLeft = this.timeLimit-timePassed
+            console.log(timePassed)
             if (timeLeft>0) {
-                this.time.html(`${formatTimer(timeLeft)}`)
+                this.time.innerHTML = `${this.formatTime(timeLeft)}`
             } else {
-                this.time.css("color","red")
-                this.time.html(`${formatTimer(timeLeft)}`)
+                this.time.style.color = "red"
+                this.time.innerHTML = `${this.formatTime(timeLeft)}`
                 clearInterval(this.timerInterval)
             }
         }, 1000)
@@ -68,6 +69,11 @@ export class Timer {
         let seconds = time%60
         if (seconds < 10) {seconds = `0${seconds}`}
         return `${minutes}:${seconds}`
+    }
+
+    set(time) {
+        this.timeLimit = time
+        this.time.innerHTML = this.formatTime(this.timeLimit)
     }
 
     get Component() {
