@@ -1,10 +1,15 @@
 import { HTMLComponent } from "./mainFunctions.js"
+import { SVG } from "./svgCollection.js"
+
+const url = "http://localhost:3000"
 
 export class Table {
 
-    constructor(data,exconfigExData) {
+    constructor(data,exconfigExData,exercise,user) {
         this.data = data
         this.exType = exconfigExData
+        this.exercise = exercise
+        this.user = user
         this.table = HTMLComponent("table",undefined,"ExDataTable","ExerciseTable")
         if (this.exType == "W") {
             this.sameWeights = checkWeights(this.data)
@@ -16,7 +21,6 @@ export class Table {
         if (this.data.length>0) { this.setupRows() }
         this.setupInput()
         this.setupAccept()
-        console.log(this.Component)
     }
     
     // Create list of Headers
@@ -61,11 +65,16 @@ export class Table {
         // Create TabelRow out of TableHeaders containing Headers as content
         let headerComponents = []
         for (let h of headers) {
-            let colComp = HTMLComponent("th",h,"tableHeader")
+            let colComp = HTMLComponent("th",h,"tableHeader",`tableHeader${h.replace(" ","")}`)
             headerComponents.push(colComp)
             this.columns[h] = [colComp]
         }
         let header = HTMLComponent("tr",headerComponents)
+        let addButton = HTMLComponent("button",SVG.Plus(0.5))
+        addButton.addEventListener("click",()=>{
+            this.addColumn(Object.keys(this.columns)[Object.keys(this.columns).length-1],"Set")
+        })
+        header.append(HTMLComponent("td",addButton,"AddSetButtonColumn",undefined,{"rowspan":3}))
         this.table.append(header)
     }
 
@@ -80,11 +89,11 @@ export class Table {
             this.columns["Date"].push(dateTableData)
             
             if (this.sameWeights) {
-                let weightTableData = HTMLComponent("td",this.data[i].data.weight1,"tableData tableDataWeight")
+                let weightTableData = HTMLComponent("td",this.data[i].data.weight1,"tableData tableDataWeight",`tableDataWeight`)
                 newRowData.push(weightTableData); this.columns["Weight"].push(weightTableData)
                 for (let el in this.data[i].data) {
                     if (/rep\d/.test(el)) {
-                        let repTableData = HTMLComponent("td",this.data[i].data[el], "tableData tableDataRep")
+                        let repTableData = HTMLComponent("td",this.data[i].data[el], "tableData tableDataRep",`tableData${el.replace(" ","")}_${i}`)
                         newRowData.push(repTableData); this.columns["Set "+el.replace(/\D/g,"")].push(repTableData)
                     }
                 } 
@@ -101,10 +110,10 @@ export class Table {
                         for (let el in this.data[i].data) {
                             if (el==key) {
                                 if (el.replace(/\d/g,"") == "weight") {
-                                    let repTableData = HTMLComponent("td",this.data[i].data[el], "tableData tableDataWeight")
+                                    let repTableData = HTMLComponent("td",this.data[i].data[el], "tableData tableDataWeight", `tableData${el.replace(" ","")}_${i}`)
                                     newRowData.push(repTableData); this.columns["Weight "+el.replace(/\D/g,"")].push(repTableData)
                                 } else {
-                                    let repTableData = HTMLComponent("td",this.data[i].data[el], "tableData tableDataRep")
+                                    let repTableData = HTMLComponent("td",this.data[i].data[el], "tableData tableDataRep", `tableData${el.replace(" ","")}_${i}`)
                                     newRowData.push(repTableData); this.columns["Set "+el.replace(/\D/g,"")].push(repTableData)
                                 }
                             }
@@ -126,6 +135,7 @@ export class Table {
 
         let emptyTableData = HTMLComponent("td",undefined,"tableData tableDataEmpty")
         inputRow.push(emptyTableData); this.columns["Date"].push(emptyTableData)
+        let columnIndex = 0
 
         for (let column in this.columns) {
             if (column!="Date") {
@@ -134,10 +144,22 @@ export class Table {
                     "min":1,
                     "placeholder":column[0]+column.replace(/\D/g,"")
                 })
+                let content = [inputField]
+                if (column.replace(/ \d/,"")=="Set" && Object.keys(this.columns)[columnIndex-1].replace(/\d/,"")!="Weight" && this.exType=="W") {
+                    let addWeightButton = HTMLComponent("button",SVG.Plus(0.4),"NewRowAddWeightButton",`${column.replace(" ","")}NewRowAddWeightButton`)
+                    addWeightButton.addEventListener("click",()=>{
+                        this.addColumn(column,"Weight")
+                        addWeightButton.remove()
+                        this.sameWeights = false
+                    })
+                    content.push(addWeightButton)
+                }
+                let inputDiv = HTMLComponent("div",content,"NewRowInputDiv",`${column.replace(" ","")}InputDiv`)
                 this.inputs[column] = inputField
-                let inputTableData = HTMLComponent("td",inputField)
+                let inputTableData = HTMLComponent("td",inputDiv,`tableData tableData${column.replace( /\d/,"")}`,`tableData${column.replace(" ","")}`)
                 inputRow.push(inputTableData); this.columns[column].push(inputTableData)
             }
+            columnIndex++
         }
 
         let inputTableRow = HTMLComponent("tr",inputRow,"tableRow inputRow")
@@ -147,24 +169,56 @@ export class Table {
     setupAccept() {
 
         let acceptButton = HTMLComponent("button","SAVE","acceptButton")
-        let acceptTableRow = HTMLComponent("tr",acceptButton, "tableRow")
+        let acceptTableData = HTMLComponent("td",acceptButton, "acceptButtonData")
+        acceptTableData.setAttribute("colspan",Object.keys(this.columns).length)
+        let acceptTableRow = HTMLComponent("tr",acceptTableData, "tableRow acceptButtonRow")
         this.table.append(acceptTableRow)
         acceptButton.addEventListener("click",()=>{
-            let newDocData = {}
-            let sets = 0
+            let inputvals = []
             for (let input in this.inputs) {
-                if (/Set \d/.test(input)) {
-                    newDocData[`rep${input.replace(/\D/g,"")}`] = parseInt(this.inputs[input].value)
-                    sets++
+                inputvals.push(this.inputs[input].value=="")
+            }
+            // Create new Document
+            if (inputvals.every(val=>val==false)) {
+                let newDocData = {}
+                let sets = 0; let weights = 0
+                for (let input in this.inputs) {
+                    if (/Set \d/.test(input)) {
+                        newDocData[`rep${input.replace(/\D/g,"")}`] = parseInt(this.inputs[input].value)
+                        sets++
+                    }
+                    if (/Weight \d/.test(input)) { weights++ }
                 }
-            }
-            if (this.sameWeights) {
-                for (let set=0; set<sets; set++) { newDocData[`weight${set+1}`] = parseInt(this.inputs["Weight"].value) }
-            } else {
-                for (let set=0; set<sets; set++) { newDocData[`weight${set+1}`] = parseInt(this.inputs[`Weight ${set+1}`].value) }
-            }
-            console.log(newDocData,this.data)
-            
+                if (this.sameWeights && this.exType=="W") {
+                    for (let set=0; set<sets; set++) { newDocData[`weight${set+1}`] = parseInt(this.inputs["Weight"].value) }
+                } else if (this.exType=="W") {
+                    for (let set=0; set<sets; set++) { 
+                        if (set<weights) {
+                            if (set==0) {
+                                newDocData[`weight${set+1}`] = parseInt(this.inputs[`Weight`].value)
+                            } else {
+                                newDocData[`weight${set+1}`] = parseInt(this.inputs[`Weight ${set+1}`].value)
+                            }
+                        } else {
+                            newDocData[`weight${set+1}`] = parseInt(this.inputs[`Weight ${weights+1}`].value)
+                        }
+                     }
+                }
+                // append new document to data and update table
+                let newDoc = {
+                    data:newDocData,
+                    date: new Date().toISOString(),
+                    exercise: this.exercise,
+                    user: this.user
+                }
+                this.data.push(newDoc)
+                this.update(this.data,this.exType)
+                fetch(url+"/saveExerciseData",{
+                    method:"POST",
+                    headers:{"Content-type":"application/json"},
+                    body:JSON.stringify(newDoc) // here it gets send. 
+                })
+            } 
         })
     
     }
@@ -172,7 +226,6 @@ export class Table {
     update(data,exconfigExData) {
         this.table.innerHTML = ""
         this.data = data
-        console.log(this.data)
         this.exType = exconfigExData
         if (this.exType == "W") {
             this.sameWeights = checkWeights(this.data)
@@ -180,13 +233,60 @@ export class Table {
             this.sameWeights = false
         }
         this.longest = getLongestDataObject(this.data)
-        console.log(this.exType=="W"&&this.sameWeights,this.exType,this.sameWeights)
         this.setupHeader()
-        this.setupRows()
-        if (this.data.length>0) { this.setupInput() }
+        if (this.data.length>0) { this.setupRows() }
+        this.setupInput()
         this.setupAccept()
-        console.log(this.Component)
         
+    }
+
+    addColumn(prevCol,mode) {
+        let setIndex = mode=="Weight"?parseInt(prevCol.replace(/\D/g,"")):parseInt(prevCol.replace(/\D/g,""))+1
+        this.columns[`${mode} ${setIndex}`] = []
+        for (let cell of this.columns[prevCol]) {
+            for (let rowIndex=0; rowIndex<this.table.children.length; rowIndex++) {
+                let row = this.table.children[rowIndex]
+                if (row.children.length>1) {
+                    for (let cellRow of row.children) {
+                        if (cell.id==cellRow.id) {
+                            let newCell
+                            switch (rowIndex) {
+                                case 0: 
+                                    newCell = HTMLComponent("th",`${mode} ${setIndex}`,"tableHeader",`tableHeader${mode}${setIndex}`)
+                                    break
+                                case this.table.children.length-2:
+                                    let inputField = HTMLComponent("input",undefined,"NewRowInput",`${mode}${setIndex}Input`,{
+                                        "type":"number",
+                                        "min":1,
+                                        "placeholder":mode=="Weight"?"W"+setIndex:"S"+setIndex
+                                    })
+                                    let content = [inputField]
+                                    if (mode=="Set") {
+                                        let addWeightButton = HTMLComponent("button",SVG.Plus(0.4),"NewRowAddWeightButton",`${prevCol.replace(" ","")}NewRowAddWeightButton`)
+                                        addWeightButton.addEventListener("click",()=>{
+                                            this.addColumn(Object.keys(this.columns)[Object.keys(this.columns).length-1],"Weight")
+                                            addWeightButton.remove()
+                                            this.sameWeights = false
+                                        })
+                                        content.push(addWeightButton)
+                                    }
+                                    let inputDiv = HTMLComponent("div",content,"NewRowInputDiv",`${mode}${setIndex}InputDiv`)
+                                    newCell = HTMLComponent("td",inputDiv,`tableData tableData${mode}`,`tableData${mode}${setIndex}`)
+                                    this.inputs[`${mode} ${setIndex}`] = inputField
+                                    break
+                                default: newCell="";
+                            }
+                            if (mode=="Set") {
+                                cellRow.after(newCell); this.columns[`${mode} ${setIndex}`].push(newCell)
+                            } else {
+                                cellRow.before(newCell)
+                            }
+                            break
+                        }
+                    } 
+                }
+            }
+        }
     }
 
     get Columns() {

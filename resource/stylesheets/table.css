@@ -1,4 +1,4 @@
-.ExDataTable td, .ExDataTable th {
+.ExDataTable .tableData, .ExDataTable .tableHeader {
   width: 5em;
 }
 
@@ -9,5 +9,36 @@ input::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
 .NewRowInput {
   width: 80%;
   text-align: center;
+}
+
+.acceptButtonData {
+  display: inline;
+}
+
+.NewRowInputDiv {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  border-radius: 5px;
+  border: solid #9b9b9b;
+}
+
+.NewRowInput {
+  width: 3em;
+  height: 1.5em;
+  margin-left: 0.5em;
+  border: none;
+  background: none;
+}
+
+.NewRowAddWeightButton {
+  width: 3em;
+  height: 1.5em;
+  background: none;
+  border: none;
 }
 /*# sourceMappingURL=table.css.map */

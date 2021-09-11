@@ -53,7 +53,6 @@ export class Timer {
         this.timerInterval = setInterval(() => {
             timePassed += 1
             timeLeft = this.timeLimit-timePassed
-            console.log(timePassed)
             if (timeLeft>0) {
                 this.time.innerHTML = `${this.formatTime(timeLeft)}`
             } else {
@@ -72,6 +71,7 @@ export class Timer {
     }
 
     set(time) {
+        clearInterval(this.timerInterval)
         this.timeLimit = time
         this.time.innerHTML = this.formatTime(this.timeLimit)
     }

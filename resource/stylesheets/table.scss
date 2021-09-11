@@ -1,7 +1,7 @@
 @import "variables";
 
 .ExDataTable{
-    td, th {
+    .tableData, .tableHeader {
         width: 5em;
     }
 }
@@ -12,4 +12,30 @@ input::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
 .NewRowInput {
     width: 80%;
     text-align: center;
+}
+
+.acceptButtonData {
+    display: inline
+}
+
+.NewRowInputDiv {
+    display: flex;
+    flex-direction: row;
+    border-radius: 5px;
+    border: solid rgb(155, 155, 155);
+}
+
+.NewRowInput {
+    width: 3em;
+    height: 1.5em;
+    margin-left: 0.5em;
+    border: none;
+    background: none;
+}
+
+.NewRowAddWeightButton {
+    width: 3em;
+    height: 1.5em;
+    background: none;
+    border: none;
 }

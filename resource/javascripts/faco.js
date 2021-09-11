@@ -83,12 +83,12 @@ async function SetupExercise(user,exconfig,category,ex) {
         timer = new Timer(exconfig.timedata)
         lowerDiv.append(timer.Component)
     } else {
-        timer.set(300)
+        timer.set(exconfig.timedata)
     }
     
     // set up or change Table (and Graph but thats about to change)
     if (!exWindowActive) {
-        table = new Table(exerciseData,exconfig.exdata)
+        table = new Table(exerciseData,exconfig.exdata,ex,user)
         lowerDiv.append(table.Component)
         for (let input in table.Inputs) {
             if (input.replace(/ \d/g,"")!="Weight") {
@@ -96,7 +96,7 @@ async function SetupExercise(user,exconfig,category,ex) {
             }
         }
     } else {
-        table.update(exerciseData,exconfig.exdata)
+        table.update(exerciseData,exconfig.exdata,ex,user)
     }
     
     // save that the window displaying the table and graph is currently active
