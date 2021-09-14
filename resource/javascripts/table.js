@@ -193,17 +193,17 @@ export class Table {
                     for (let set=0; set<sets; set++) { newDocData[`weight${set+1}`] = parseInt(this.inputs["Weight"].value) }
                 } else if (this.exType=="W") {
                     for (let set=0; set<sets; set++) { 
-                        if (set<weights) {
-                            if (set==0) {
-                                newDocData[`weight${set+1}`] = parseInt(this.inputs[`Weight`].value)
-                            } else {
-                                newDocData[`weight${set+1}`] = parseInt(this.inputs[`Weight ${set+1}`].value)
-                            }
+                        console.log(set)
+                        if (Object.keys(this.inputs).includes(`Weight ${set+1}`)) {
+                            console.log("1")
+                            newDocData[`weight${set+1}`] = parseInt(this.inputs[`Weight ${set+1}`].value)
                         } else {
-                            newDocData[`weight${set+1}`] = parseInt(this.inputs[`Weight ${weights+1}`].value)
+                            console.log("2")
+                            newDocData[`weight${set+1}`] = parseInt(this.inputs[`Weight`].value)
                         }
                      }
                 }
+                console.log(newDocData,this.inputs)
                 // append new document to data and update table
                 let newDoc = {
                     data:newDocData,
@@ -223,9 +223,11 @@ export class Table {
     
     }
 
-    update(data,exconfigExData) {
+    update(data,exconfigExData,exercise,user) {
         this.table.innerHTML = ""
         this.data = data
+        this.exercise = exercise
+        this.user = user
         this.exType = exconfigExData
         if (this.exType == "W") {
             this.sameWeights = checkWeights(this.data)

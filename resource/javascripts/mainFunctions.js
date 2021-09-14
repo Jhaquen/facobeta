@@ -37,3 +37,13 @@ export function SetAttributes(el,attrs) {
         el.setAttribute(attr,attrs[attr])
     }
 }
+
+export function forEachValue(dic,callback) {
+    if (dic.constructor!=Object) {
+        callback(dic)
+    } else {
+        for (let key in dic) {
+            forEachValue(dic[key],callback)
+        }
+    }
+}

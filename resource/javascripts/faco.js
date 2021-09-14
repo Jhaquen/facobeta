@@ -2,7 +2,7 @@ import {  DisplayWindowSetup} from "./facoFunctions.js"
 import { HTMLComponent } from "./mainFunctions.js"
 import { SideBar } from "./sideBar.js"
 import { Timer } from "./timer.js"
-import { setupNewExPopup } from "./NewExPopup.js"
+import { ExPopup } from "./NewExPopup.js"
 import { Table } from "./table.js"
 
 const url = "http://localhost:3000"
@@ -55,14 +55,19 @@ async function LoadExercisePage(user) {
     // add functionality to Exercise Links and newExButtons
     for (let category in sideBar.Links) {
         for (let ex in sideBar.Links[category]) {
-            sideBar.Links[category][ex].addEventListener("click",()=>SetupExercise(user,configdata[0].exercise[category][ex],category,ex))
+            sideBar.Links[category][ex].addEventListener("click",()=>SetupExercise(user,configdata[0].exercise[category][ex],ex))
         }
-        sideBar.newExButtons[category].addEventListener("click",()=>setupNewExPopup(sideBar.newExButtons[category].getBoundingClientRect(),category,user,configdata))
+        sideBar.newExButtons[category].addEventListener("click",()=>{
+            let popup = new ExPopup(category,user,configdata,sideBar)
+            document.body.append(popup.Component)
+        })
     }
 }
 
 
-async function SetupExercise(user,exconfig,category,ex) {
+export async function SetupExercise(user,exconfig,ex) {
+
+    console.log(exconfig)
     
     let lowerDiv = document.getElementById("lowerDiv")
     let mainDiv = document.getElementById("mainDiv")
