@@ -18,7 +18,8 @@ export class Table {
         }
         this.longest = getLongestDataObject(this.data)
         this.setupHeader()
-        if (this.data.length>0) { this.setupRows() }
+        //if (this.data.length>0) { this.setupRows() }
+        this.setupRows()
         this.setupInput()
         this.setupAccept()
     }
@@ -69,18 +70,14 @@ export class Table {
             headerComponents.push(colComp)
             this.columns[h] = [colComp]
         }
+        headerComponents.push(HTMLComponent("th",undefined,"tableHeader"))
         let header = HTMLComponent("tr",headerComponents)
-        let addButton = HTMLComponent("button",SVG.Plus(0.5))
-        addButton.addEventListener("click",()=>{
-            this.addColumn(Object.keys(this.columns)[Object.keys(this.columns).length-1],"Set")
-        })
-        header.append(HTMLComponent("td",addButton,"AddSetButtonColumn",undefined,{"rowspan":3}))
         this.table.append(header)
     }
-
+    
     // setup each data containing row
     setupRows() {
-
+        
         for (let i=(this.data.length>4)?this.data.length-4:0; i<this.data.length; i++) {
             
             let date = new Date(this.data[i].date).toDateString()
@@ -121,12 +118,19 @@ export class Table {
                     }
                 }
             }
-
+            
             let newRow = HTMLComponent("tr",newRowData,"tableRow")
             this.table.append(newRow)
         }
+        let addButton = HTMLComponent("button",SVG.Plus(0.5))
+        addButton.addEventListener("click",()=>{
+            this.addColumn(Object.keys(this.columns)[Object.keys(this.columns).length-1],"Set")
+        })
+        if (this.table.children.length>1) {
+            this.table.children[1].lastChild.after(HTMLComponent("td",addButton,"AddSetButtonColumn",undefined,{"rowspan":this.table.children.length-1}))
+        }
     }
-
+    
     // Setup Ipnut fields as final row of table
     setupInput() {
 
@@ -152,7 +156,7 @@ export class Table {
                         addWeightButton.remove()
                         this.sameWeights = false
                     })
-                    content.push(addWeightButton)
+                    content.unshift(addWeightButton)
                 }
                 let inputDiv = HTMLComponent("div",content,"NewRowInputDiv",`${column.replace(" ","")}InputDiv`)
                 this.inputs[column] = inputField

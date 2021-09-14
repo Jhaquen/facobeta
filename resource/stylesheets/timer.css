@@ -31,7 +31,7 @@
   stroke: grey;
 }
 
-#TimerPathRemaining {
+#TimerPathRemainingPaused, #TimerPathRemaingPlaying {
   stroke-width: 7px;
   -webkit-transform: rotate(90deg);
           transform: rotate(90deg);
@@ -39,7 +39,14 @@
           transform-origin: center;
   -webkit-transition: 1s linear all;
   transition: 1s linear all;
-  stroke: currentColor;
+}
+
+#TimerPathRemainingPlaying {
+  stroke: #C62FDE;
+}
+
+#TimerPathRemainingPaused {
+  stroke: #565a5c;
 }
 
 #TimerSvg {

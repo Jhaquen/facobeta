@@ -20,7 +20,8 @@ export class Timer {
         SetAttributes(this.progressBarRemaining,{
             "d":"M 50, 50 m -45, 0 a 45,45 0 1,0 90,0 a 45,45 0 1,0 -90,0",
             "stroke-dasharray":283,
-            "id":"TimerPathRemaining"
+            "stroke-width":6,
+            "id":"TimerPathRemainingPaused"
         })
         SetAttributes(this.progressBarWrapper,{"id":"TimerCircle"})
         SetAttributes(this.svgWrapper,{
@@ -38,6 +39,7 @@ export class Timer {
         clearInterval(this.timerInterval)
         let timePassed = 0
         let timeLeft = this.timeLimit
+        this.progressBarRemaining.setAttribute("id","TimerPathRemainingPlaying")
     
         /**
         das hat noch nicht funktioniert

@@ -1,8 +1,22 @@
 @import "variables";
 
 .ExDataTable{
+    color: $textcolor;
+    font-family: $textfont;
+    border-collapse: collapse;
+    text-align: center;
     .tableData, .tableHeader {
         width: 5em;
+        padding: 0.5em;
+    }
+    .tableHeader {
+        border-bottom: solid $textcolor;
+    }
+    .tableData:not(.tableData:nth-child(0)) {
+        border-right: solid $textcolor;
+    }
+    .tableHeader:last-child {
+        border-right: none;
     }
 }
 
@@ -21,21 +35,30 @@ input::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
 .NewRowInputDiv {
     display: flex;
     flex-direction: row;
-    border-radius: 5px;
-    border: solid rgb(155, 155, 155);
+    align-items: center;
 }
 
 .NewRowInput {
-    width: 3em;
-    height: 1.5em;
-    margin-left: 0.5em;
+    border-radius: 0.3em;
+    background: $highlightcolor;
+    box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.25);
+    height: 2em;
+    margin-left: 0.2em;
     border: none;
-    background: none;
 }
 
 .NewRowAddWeightButton {
-    width: 3em;
-    height: 1.5em;
+    width: 1em;
+    height: 1.3em;
     background: none;
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
     border: none;
+    background-color: $highlightcolor;
+    padding: 0em;
+    position: relative;
+    svg {
+        position: relative;
+        top: -3px;
+        left: -5px;
+    }
 }

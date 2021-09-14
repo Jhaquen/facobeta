@@ -1,10 +1,10 @@
 {
     "version": 3,
-    "mappings": "AAEA,AAAA,WAAW,CAAC;EACR,gBAAgB,ECAb,SAAS;EDCZ,KAAK,EAAE,IAAI;EACX,MAAM,EAAE,IAAI;EACZ,QAAQ,EAAE,KAAK;EACf,UAAU,EAAE,sBAAsB;EAClC,aAAa,EAAE,MAAM;EACrB,OAAO,EAAE,IAAI;EACb,cAAc,EAAE,MAAM;EACtB,eAAe,EAAE,MAAM;EACvB,WAAW,EAAE,MAAM;CAClB",
+    "mappings": "AAEA,AAAA,WAAW,CAAC;EACR,gBAAgB,ECGb,SAAS;EDFZ,KAAK,EAAE,IAAI;EACX,MAAM,EAAE,IAAI;EACZ,QAAQ,EAAE,KAAK;EACf,UAAU,EAAE,sBAAsB;EAClC,aAAa,EAAE,MAAM;EACrB,OAAO,EAAE,IAAI;EACb,cAAc,EAAE,MAAM;EACtB,eAAe,EAAE,MAAM;EACvB,WAAW,EAAE,MAAM;CAClB",
     "sources": [
-        "Popup.scss",
+        "popup.scss",
         "_variables.scss"
     ],
     "names": [],
-    "file": "Popup.css"
+    "file": "popup.css"
 }

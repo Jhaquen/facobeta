@@ -27,14 +27,19 @@
     stroke: grey;
 }
 
-#TimerPathRemaining {
+#TimerPathRemainingPaused, #TimerPathRemaingPlaying {
     stroke-width: 7px;
     // stroke-linecap: round;
     // animation start at top
     transform: rotate(90deg);
     transform-origin: center;
     transition: 1s linear all;
-    stroke: currentColor
+}
+#TimerPathRemainingPlaying {
+    stroke: $popcolor;
+}
+#TimerPathRemainingPaused {
+    stroke: $primarycolor
 }
 
 #TimerSvg {
