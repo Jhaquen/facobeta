@@ -17,7 +17,7 @@ window.onload = function() {
     let usernameInput = document.getElementById("username")
     let mainpage = document.getElementById("mainpage")
     let WelcomeMessage = document.getElementById("WelcomeMessage")
-    let loggedIn = true
+    let loggedIn = false
     
     if (!loggedIn) {
         mainpage.style.visibility = "hidden"
