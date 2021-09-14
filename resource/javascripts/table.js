@@ -152,7 +152,7 @@ export class Table {
                         addWeightButton.remove()
                         this.sameWeights = false
                     })
-                    content.push(addWeightButton)
+                    content.unshift(addWeightButton)
                 }
                 let inputDiv = HTMLComponent("div",content,"NewRowInputDiv",`${column.replace(" ","")}InputDiv`)
                 this.inputs[column] = inputField

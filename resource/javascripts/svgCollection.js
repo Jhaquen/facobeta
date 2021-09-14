@@ -18,13 +18,13 @@ export class SVG {
         let svgWrapper = this.createSVGWrapper("24","24","0 0 24 24")
         let path1 = this.createPath({
             "d":"M12 22V2",
-            "stroke":"black",
+            "stroke":"currentcolor",
             "stroke-width":4,
             "stroke-linecap":"round"
         })
         let path2 = this.createPath({
             "d":"M2 12L22 12",
-            "stroke":"black",
+            "stroke":"currentcolor",
             "stroke-width":4,
             "stroke-linecap":"round"
         })
