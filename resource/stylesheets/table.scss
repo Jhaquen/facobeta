@@ -3,8 +3,20 @@
 .ExDataTable{
     color: $textcolor;
     font-family: $textfont;
+    border-collapse: collapse;
+    text-align: center;
     .tableData, .tableHeader {
         width: 5em;
+        padding: 0.5em;
+    }
+    .tableHeader {
+        border-bottom: solid $textcolor;
+    }
+    .tableData:not(.tableData:nth-child(0)) {
+        border-right: solid $textcolor;
+    }
+    .tableHeader:last-child {
+        border-right: none;
     }
 }
 

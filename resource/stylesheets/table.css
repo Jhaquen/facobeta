@@ -1,10 +1,25 @@
 .ExDataTable {
   color: #DBDBDB;
   font-family: "Calibri";
+  border-collapse: collapse;
+  text-align: center;
 }
 
 .ExDataTable .tableData, .ExDataTable .tableHeader {
   width: 5em;
+  padding: 0.5em;
+}
+
+.ExDataTable .tableHeader {
+  border-bottom: solid #DBDBDB;
+}
+
+.ExDataTable .tableData:not(.tableData:nth-child(0)) {
+  border-right: solid #DBDBDB;
+}
+
+.ExDataTable .tableHeader:last-child {
+  border-right: none;
 }
 
 input::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
