@@ -1,0 +1,25 @@
+#ChartDiv {
+  width: 100%;
+}
+
+#gContainer {
+  -webkit-transition: 0.7s linear;
+  transition: 0.7s linear;
+}
+
+#dataRangeSelector {
+  opacity: 0%;
+}
+
+#gContainer:hover {
+  background-color: rgba(212, 212, 212, 0.418);
+}
+
+#gContainer:hover #dataRangeSelector {
+  opacity: 100%;
+}
+
+#GraphLineMain {
+  stroke: white;
+}
+/*# sourceMappingURL=chart.css.map */

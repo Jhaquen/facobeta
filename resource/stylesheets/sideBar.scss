@@ -5,9 +5,9 @@ body {
 }
 #SideBarDiv{
     color: $textcolor;
-    position: absolute;
+    //position: absolute;
     height: 100vh;
-    left: 0px;
+    //left: 0px;
     width: 1em;
     padding-left: 0.5em;
     background-color: $primarycolor;
@@ -17,7 +17,7 @@ body {
     overflow: hidden;
 }
 #SideBarDiv:hover{
-    width: 10vw;
+    width: 15vw;
 }
 
 .LinkDiv p {

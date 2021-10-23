@@ -13,7 +13,7 @@ body{
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 
 #DataChart {
@@ -30,4 +30,8 @@ body{
 
 #mainDiv {
     visibility: hidden;
+    display:flex;
+    flex-direction: column;
+    flex-grow: 10;
+    align-items: center;
 }

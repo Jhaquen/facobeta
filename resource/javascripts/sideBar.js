@@ -1,6 +1,6 @@
 import { HTMLComponent } from "./mainFunctions.js"
 import { SVG } from "./svgCollection.js"
-const url = "http://localhost:3000"
+import { url } from "./faco.js"
 
 /*
 export function sideBarSetup(configdata,user,ExerciseDiv) {

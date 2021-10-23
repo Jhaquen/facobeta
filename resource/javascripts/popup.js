@@ -1,71 +1,28 @@
 import { forEachValue, HTMLComponent } from "./mainFunctions.js"
-import { SetupExercise } from "./faco.js"
-const url = "http://localhost:3000"
+import { SetupExercise,url } from "./faco.js"
+//const url = "http://localhost:3000"
 
-export function setupNewExPopup(pos,category,user,configdata) {
-    console.log(pos,category,user)
-    let newExPopup = div(undefined,`NewExPopup`,`NewExPopup${category}`)
-    newExPopup.css({
-        "top":`${pos.top-50}px`,
-        "left":`${pos.left+50}px`,
-    })
-    let form = div(`
-    <input type="text" placeholder="Exercise Name" id="NewExName">
-    <form>
-    <label for="ExTypeWeigt">Weight</label>
-    <input type="radio" name="ExType" id="ExTypeWeight">
-    <label for="ExTypeBody">BodyWeight</label>
-    <input type="radio" name="ExType" id="ExTypeBody">
-    </form>
-    `)
-    let cancelButton = buttonButton("cancel")
-    cancelButton.on("click",()=>{
-        newExPopup.remove()
-    })
-    let confirmButton = buttonButton("confirm")
-    confirmButton.on("click",()=>{
-        let newExName = $("#NewExName").val()
-        if ($("#ExTypeWeight").prop("checked")==true) {
-            configdata[0].exercise[category][newExName] = {
-                exconfig: ["weight1","rep1","weight2","rep2","weight3","rep3"],
-                timeconfig: 120
-            }
-        } else if ($("#ExTypeBody").prop("checked")==true) { 
-            configdata[0].exercise[category][newExName] = {
-                exconfig: ["rep1","rep2","rep3"],
-                timeconfig: 120
-            }
-        }
-        fetch(url+"/newExercise", {
-            method:"POST",
-            headers:{"Content-type":"application/json"},
-            body:JSON.stringify({user:user,exercise:configdata[0].exercise}) })
-            let newLink = $(`<p class="ExLink" id="${newExName}_link"></p>`).text(newExName)
-        let exconfig = configdata[0].exercise[category][newExName].exconfig
-        newLink.on("click",()=>{
-            // get data of exercise
-            fetch(url+"/getExerciseData", {
-                method:"POST",
-                headers:{"Content-type":"application/json"},
-                body:JSON.stringify({
-                    user:user,
-                    exercise:newExName
-                })
-            }).then(response => response.json()).then(data => { DisplayWindowSetup(data,exconfig,user,category,newExName) }) })
-        $(`#LinkDiv${category}`).append(newLink)
-        newExPopup.remove()
-    })
-    newExPopup.append(form); newExPopup.append(cancelButton); newExPopup.append(confirmButton)
-    $("body").append(newExPopup)
+class Popup {
+    constructor(width,height) {
+        this.popup = HTMLComponent("div",undefined,"NewExPopup")
+        this.popup.style.width = width
+        this.popup.style.height = height
+        this.popup.style.top = `${50-height/2}vh`
+        this.popup.style.left = `${50-width/2}vw`
+        this.elements = {}
+    }
+    
+    build() {
+        forEachValue(this.elements,(element)=>{
+            this.popup.append(element)
+        })
+    }
 }
-
-export class ExPopup {
+export class ExPopup extends Popup{
 
     constructor(category, user, configdata, sidebar) {
-        this.popup = HTMLComponent("div",undefined,"NewExPopup")
+        super(30,30)
         this.sidebar = sidebar
-        this.popup.style.top = "40vh"
-        this.popup.style.left = "40vw"
         this.configdata = configdata; this.user = user; this.category = category
         this.elements = {
             form:{
@@ -94,9 +51,7 @@ export class ExPopup {
             this.popup.remove()
         })
         // Append Components
-        forEachValue(this.elements,(element)=>{
-            this.popup.append(element)
-        })
+        super.build()
     }
 
     createDocument() {

@@ -1,7 +1,8 @@
 import { HTMLComponent } from "./mainFunctions.js"
 import { SVG } from "./svgCollection.js"
+import { url } from "./faco.js"
 
-const url = "http://localhost:3000"
+//const url = "http://localhost:3000"
 
 export class Table {
 
