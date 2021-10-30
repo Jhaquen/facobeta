@@ -54,7 +54,10 @@ async function LoadExercisePage(user) {
     // add functionality to Exercise Links and newExButtons
     for (let category in sideBar.Links) {
         for (let ex in sideBar.Links[category]) {
-            sideBar.Links[category][ex].addEventListener("click",()=>SetupExercise(user,configdata[0].exercise[category][ex],ex))
+            sideBar.Links[category][ex].addEventListener("click",()=>{
+                SetupExercise(user,configdata[0].exercise[category][ex],ex)
+                sideBar.setActive(category,ex)
+            })
         }
         sideBar.newExButtons[category].addEventListener("click",()=>{
             let popup = new ExPopup(category,user,configdata,sideBar)

@@ -14,10 +14,24 @@ body {
   transition: width 0.5s;
   text-overflow: "";
   overflow: hidden;
+  white-space: nowrap;
 }
 
 #SideBarDiv:hover {
   width: 15vw;
+}
+
+.ExCategoryDiv {
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  max-height: 2em;
+  overflow: hidden;
+}
+
+.ExCategoryDiv:hover {
+  -webkit-animation: expand 0.5s linear 0s forwards;
+          animation: expand 0.5s linear 0s forwards;
 }
 
 .LinkDiv p {
@@ -41,11 +55,11 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  margin-top: 2em;
 }
 
 .ExCategoryHeader {
   font-family: "Calibri Light";
+  font-size: 1.2em;
   width: 100%;
   margin: 0em;
 }
@@ -70,5 +84,29 @@ body {
   position: absolute;
   top: -3px;
   left: -4px;
+}
+
+@-webkit-keyframes colapse {
+  100% {
+    max-height: 2em;
+  }
+}
+
+@keyframes colapse {
+  100% {
+    max-height: 2em;
+  }
+}
+
+@-webkit-keyframes expand {
+  100% {
+    max-height: 20em;
+  }
+}
+
+@keyframes expand {
+  100% {
+    max-height: 20em;
+  }
 }
 /*# sourceMappingURL=sideBar.css.map */

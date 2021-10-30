@@ -5,7 +5,7 @@ const mongoClient = require("mongodb").MongoClient
 const mongoose = require("mongoose")
 
 const port = 3000
-const staticRouter = require("./routes/staticRouter.js")
+const staticRouter = require("./routes/router.js")
 const url = "mongodb+srv://Barbara:0000@cluster0.lkv3a.mongodb.net/sport?retryWrites=true&w=majority"
 
 app.use(express.json())

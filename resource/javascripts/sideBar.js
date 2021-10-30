@@ -2,45 +2,11 @@ import { HTMLComponent } from "./mainFunctions.js"
 import { SVG } from "./svgCollection.js"
 import { url } from "./faco.js"
 
-/*
-export function sideBarSetup(configdata,user,ExerciseDiv) {
-    
-    for (let category in configdata.exercise) { //Warum ist data eine liste? Nur ein element
-        let categoryDiv = HTMLComponent("div", HTMLComponent("h2",undefined,"ExCategory",category), "ExCategoryDiv", `ExCategoryDiv${category}`)
-        let linkDiv = HTMLComponent("div",undefined,"LinkDiv",`LinkDiv${category}`) //noch ein Div zum besseren anordnen der Links
-        for (let ex in configdata.exercise[category]) {
-            let exerciseLink = HTMLComponent("p",ex,"ExLink",`${ex}Link`)
-            let exconfig = configdata.exercise[category][ex].exconfig
-            // Exercise = Link: If clicked on -> DisplayWindowSetup for this Exercise 
-            exerciseLink.addEventListener("click",()=>{
-                // get data of exercise
-                fetch(url+"/getExerciseData", {
-                    method:"POST",
-                    headers:{"Content-type":"application/json"},
-                    body:JSON.stringify({
-                        user:user,
-                        exercise:ex
-                    })
-                }).then(response => response.json()).then(data => { DisplayWindowSetup(data,exconfig,user,category,ex) })
-            })
-            //Append each Exercise
-            linkDiv.append(exerciseLink)
-        }   
-        let newExButton = HTMLComponent("button","new","AddButton",`newExButton${category}`)
-        newExButton.addEventListener("click",()=>{
-            setupNewExPopup($(`#newExButton${category}`).position(),category,user,configdata)
-        })
-        linkDiv.append(newExButton)
-        categoryDiv.append(linkDiv)
-        ExerciseDiv.append(categoryDiv)
-    }
-}
-*/
-
 export class SideBar {
 
     constructor(configdata) {
         this.configdata = configdata[0]
+        this.activeLink = {category:undefined, ex:undefined}
         this.setup()
     }
 
@@ -71,6 +37,17 @@ export class SideBar {
             // sort category and append to sidebar
             this.categoryDivs[category] = categoryDiv 
             this.SideBarDiv.append(categoryDiv)
+        }
+    }
+
+    setActive(category,ex) {
+        this.activeLink.category = category; this.activeLink.ex = ex
+        for (let category in this.categoryDivs) {
+            if (category == this.activeLink.category) {
+                this.categoryDivs[category].style["max-height"] = "20em"
+            } else {
+                this.categoryDivs[category].style["max-height"] = "2em"
+            }
         }
     }
 
