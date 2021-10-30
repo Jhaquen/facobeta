@@ -15,9 +15,18 @@ body {
     transition: width 0.5s;
     text-overflow: "";
     overflow: hidden;
+    white-space: nowrap;
 }
-#SideBarDiv:hover{
+#SideBarDiv:hover {
     width: 10vw;
+}
+.ExCategoryDiv {
+    height: fit-content;
+    max-height: 2em;
+    overflow: hidden;
+}
+.ExCategoryDiv:hover {
+    animation: expand 0.5s linear 0s forwards;
 }
 
 .LinkDiv p {
@@ -33,10 +42,10 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 2em;
 }
 .ExCategoryHeader {
     font-family: $headerfont;
+    font-size: $headerfontsize;
     width: 100%;
     margin: 0em;
 }
@@ -60,4 +69,16 @@ body {
     position: absolute;
     top: -3px;
     left: -4px;
+}
+
+@keyframes colapse {
+    100% {
+        max-height: 2em;
+    }
+}
+
+@keyframes expand {
+    100% {
+        max-height: 20em;
+    }
 }

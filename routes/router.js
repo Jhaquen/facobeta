@@ -30,7 +30,9 @@ app.post("/saveExerciseData", (req,res)=>{
 })
 
 app.post("/newExercise", (req,res)=>{
-    configModel.findOneAndUpdate({user:req.body.user},{exercise:req.body.exercise},{new:true},(err,created)=>{
+    configModel.findOneAndUpdate(
+        {user:req.body.user},{exercise:req.body.exercise},
+        {new:true,useFindAndModify:true},(err,created)=>{
         if (err) { res.send({err}) } else { res.send(JSON.stringify(created)) }
     })
 })
